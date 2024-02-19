@@ -2,7 +2,7 @@ package users
 
 import "github.com/jackjohn7/smllnk/db/models"
 
-type UserRepositories interface {
+type UserRepository interface {
 	// Insert new user into database
 	Create(email string) (err error, user *models.User)
 	// Update user with new data

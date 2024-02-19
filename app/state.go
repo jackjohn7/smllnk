@@ -7,8 +7,9 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/jackjohn7/smllnk/db/repositories"
 	"github.com/labstack/echo/v4"
+
+	"github.com/jackjohn7/smllnk/db/repositories"
 )
 
 /*
@@ -27,7 +28,7 @@ type App struct {
 	addr         string
 	server       *echo.Echo
 	controllers  []Controller
-	repositories *repositories.Repository
+	repositories *repositories.Repositories
 }
 
 /*
@@ -44,7 +45,7 @@ func New(addr string, controllers []Controller) *App {
 /*
 Provides app with repositories for CRUD operations
 */
-func (app *App) WithRepositories(repos *repositories.Repository) *App {
+func (app *App) WithRepositories(repos *repositories.Repositories) *App {
 	app.repositories = repos
 
 	return app

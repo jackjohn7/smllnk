@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// user sql repository (doesn't necessarily have to be postgres)
-	repos := repositories.NewPGRepository(nil)
+	repos := repositories.NewPGRepositories(nil)
 
 	app := app.New(":3005", []app.Controller{
 		controllers.NewGeneralController(),
