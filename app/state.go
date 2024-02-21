@@ -52,6 +52,14 @@ func (app *App) WithRepositories(repos *repositories.Repositories) *App {
 }
 
 /*
+Supplies middleware to echo server
+*/
+func (app *App) WithMiddleware(f echo.MiddlewareFunc) *App {
+	app.server.Use(f)
+	return app
+}
+
+/*
 Returns the Echo server of the App.
 
 This is useful for adding global middleware

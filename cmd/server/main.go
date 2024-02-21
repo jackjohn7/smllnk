@@ -1,6 +1,9 @@
 package main
 
 import (
+	"github.com/gorilla/sessions"
+	"github.com/labstack/echo-contrib/session"
+
 	"github.com/jackjohn7/smllnk/app"
 	"github.com/jackjohn7/smllnk/controllers"
 	"github.com/jackjohn7/smllnk/db/repositories"
@@ -13,10 +16,13 @@ func main() {
 
 	app := app.New(":3005", []app.Controller{
 		controllers.NewGeneralController(),
-	}).WithRepositories(repos)
+	}).WithRepositories(repos).
+		WithMiddleware(session.Middleware(
+			sessions.NewCookieStore([]byte("secret"))), // replace later
+		)
 
 	// global middleware
-	app.Server().Use(mids.NewLogger(app.Server()).Start())
+	app.WithMiddleware(mids.NewLogger(app.Server()).Start())
 
 	// register controllers and serve
 	app.Serve()
