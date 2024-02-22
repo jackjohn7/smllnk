@@ -14,7 +14,10 @@ type (
 	}
 )
 
-func NewPGRepositories(db *sqlx.DB) *Repositories {
+func NewPGRepositories() *Repositories {
+	// create pg connection
+	var db *sqlx.DB = nil
+
 	return &Repositories{
 		Users: users.NewPG(db),
 		Links: links.NewPG(db),
