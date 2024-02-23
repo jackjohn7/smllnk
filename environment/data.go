@@ -11,7 +11,7 @@ import (
 
 type (
 	DbEnv struct {
-		PG_CONNECTION_STRING string
+		DATABASE_URL string
 	}
 
 	AuthEnv struct {
@@ -60,7 +60,7 @@ func init() {
 
 	Env = &Environment{
 		DbEnv: DbEnv{
-			PG_CONNECTION_STRING: os.Getenv("PG_CONNECTION_STRING"),
+			DATABASE_URL: os.Getenv("DATABASE_URL"),
 		},
 		IsProd: buildEnv == "PROD",
 		Port:   port,

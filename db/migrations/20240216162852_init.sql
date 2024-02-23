@@ -1,9 +1,9 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE users (
-  id VARCHAR(36),
+  id VARCHAR(36) PRIMARY KEY,
   email VARCHAR(255),
-  verified BOOLEAN DEFAULT FALSE,
+  verified BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE links (
@@ -18,8 +18,8 @@ CREATE TABLE link_histories (
   id SERIAL PRIMARY KEY,
   user_agent TEXT,
   link_id VARCHAR(10) NOT NULL REFERENCES links(id),
-  time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-)
+  time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE db_migrations (
   id SERIAL PRIMARY KEY,
@@ -30,5 +30,7 @@ CREATE TABLE db_migrations (
 -- +goose Down
 -- +goose StatementBegin
 DROP TABLE users;
+DROP TABLE links;
+DROP TABLE link_histories;
 DROP TABLE db_migrations;
 -- +goose StatementEnd
