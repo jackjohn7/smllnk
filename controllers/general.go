@@ -1,15 +1,33 @@
 package controllers
 
-import "github.com/labstack/echo/v4"
+import (
+	"github.com/jackjohn7/smllnk/db/repositories"
+	mids "github.com/jackjohn7/smllnk/middlewares"
+	"github.com/jackjohn7/smllnk/sessions"
 
-type GeneralController struct{}
+	"github.com/labstack/echo/v4"
+)
 
-func NewGeneralController() *GeneralController {
-	return &GeneralController{}
+type GeneralController struct {
+	repositories *repositories.Repositories
+	sessionStore sessions.SessionStore
+	auth         *mids.Auth
+}
+
+func NewGeneralController(
+	repo *repositories.Repositories,
+	sess sessions.SessionStore,
+	auth *mids.Auth,
+) *GeneralController {
+	return &GeneralController{
+		repositories: repo,
+		sessionStore: sess,
+		auth:         auth,
+	}
 }
 
 func (c *GeneralController) Register(app *echo.Echo) error {
-	app.GET("/", IndexHandler)
+	app.GET("/", IndexHandler, c.auth.AuthCtx(), c.auth.Restrict())
 	return nil
 }
 

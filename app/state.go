@@ -8,8 +8,6 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-
-	"github.com/jackjohn7/smllnk/db/repositories"
 )
 
 /*
@@ -25,10 +23,9 @@ type Controller interface {
 App is what contains the echo server, registered controllers, and global state.
 */
 type App struct {
-	addr         string
-	server       *echo.Echo
-	controllers  []Controller
-	repositories *repositories.Repositories
+	addr        string
+	server      *echo.Echo
+	controllers []Controller
 }
 
 /*
@@ -40,15 +37,6 @@ func New(addr string, controllers []Controller) *App {
 		server:      echo.New(),
 		controllers: controllers,
 	}
-}
-
-/*
-Provides app with repositories for CRUD operations
-*/
-func (app *App) WithRepositories(repos *repositories.Repositories) *App {
-	app.repositories = repos
-
-	return app
 }
 
 /*

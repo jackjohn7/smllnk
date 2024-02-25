@@ -12,6 +12,8 @@ import (
 type (
 	DbEnv struct {
 		DATABASE_URL string
+		REDIS_URL    string
+		REDIS_PW string
 	}
 
 	AuthEnv struct {
@@ -61,6 +63,8 @@ func init() {
 	Env = &Environment{
 		DbEnv: DbEnv{
 			DATABASE_URL: os.Getenv("DATABASE_URL"),
+			REDIS_URL:    os.Getenv("REDIS_URL"),
+			REDIS_PW:     os.Getenv("REDIS_PASSWORD"),
 		},
 		IsProd: buildEnv == "PROD",
 		Port:   port,

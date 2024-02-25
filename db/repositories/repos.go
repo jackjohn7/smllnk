@@ -3,12 +3,11 @@ package repositories
 import (
 	"log"
 
-	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 
+	"github.com/jackjohn7/smllnk/db/connections"
 	"github.com/jackjohn7/smllnk/db/repositories/links"
 	"github.com/jackjohn7/smllnk/db/repositories/users"
-	"github.com/jackjohn7/smllnk/environment"
 )
 
 type (
@@ -20,7 +19,7 @@ type (
 
 func NewPGRepositories() *Repositories {
 	// create pg connection
-	db, err := sqlx.Connect("postgres", environment.Env.DbEnv.DATABASE_URL)
+	db, err := connections.NewPostgresConnection()
 	if err != nil {
 		log.Fatalln(err)
 	}

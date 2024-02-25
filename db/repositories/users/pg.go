@@ -18,8 +18,8 @@ func NewPG(db *sqlx.DB) *UserRepositoryPG {
 	}
 }
 
-func (r *UserRepositoryPG) Create(email string) (err error, user *models.User) {
-	return errors.New("Unimplemented"), nil
+func (r *UserRepositoryPG) Create(email string) (user *models.User, err error) {
+	return nil, errors.New("Unimplemented")
 }
 
 func (r *UserRepositoryPG) Update(id string, newUser *models.User) (ok bool) {
@@ -30,14 +30,14 @@ func (r *UserRepositoryPG) Delete(id string) (ok bool) {
 	return
 }
 
-func (r *UserRepositoryPG) GetAll() (err error, users []*models.User) {
-	return errors.New("Unimplemented"), []*models.User{}
+func (r *UserRepositoryPG) GetAll() (users []*models.User, err error) {
+	return []*models.User{}, errors.New("Unimplemented")
 }
 
-func (r *UserRepositoryPG) GetById(id string) (err error, user *models.User) {
-	return errors.New("Unimplemented"), nil
+func (r *UserRepositoryPG) GetById(id string) (user *models.User, err error) {
+	return nil, errors.New("Unimplemented")
 }
 
-func (r *UserRepositoryPG) GetByEmail(email string) (err error, user *models.User) {
-	return errors.New("Unimplemented"), nil
+func (r *UserRepositoryPG) GetByEmail(email string) (user *models.User, err error) {
+	return nil, errors.New("Unimplemented")
 }

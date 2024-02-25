@@ -2,8 +2,11 @@ package utils
 
 import (
 	crand "crypto/rand"
+	"encoding/base64"
 	"math/rand"
 )
+
+const SessionIdLength int = 64 // length in bytes
 
 var alphabet = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 
@@ -30,4 +33,15 @@ func GenerateRandomBytes(n int) ([]byte, error) {
 	}
 
 	return b, nil
+}
+
+/*
+Generates a base-64 encoded session id
+*/
+func GenerateSessionId() (string, error) {
+	bytes, err := GenerateRandomBytes(SessionIdLength)
+	if err != nil {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(bytes), nil
 }

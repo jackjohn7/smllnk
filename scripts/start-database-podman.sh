@@ -1,5 +1,5 @@
 #!/bin/bash
-# Use this script to start a docker container for a local development database
+# Use this script to start a podman container for a local development database
 
 # TO RUN ON WINDOWS: 
 # 1. Install WSL (Windows Subsystem for Linux) - https://learn.microsoft.com/en-us/windows/wsl/install
