@@ -5,7 +5,9 @@ import (
 
 	repos "github.com/jackjohn7/smllnk/db/repositories"
 	mids "github.com/jackjohn7/smllnk/middlewares"
+	"github.com/jackjohn7/smllnk/public/views/login"
 	"github.com/jackjohn7/smllnk/sessions"
+	"github.com/jackjohn7/smllnk/utils"
 )
 
 type AccountsController struct {
@@ -31,7 +33,8 @@ func (c *AccountsController) Register(mux *http.ServeMux) error {
 	return nil
 }
 
-func loginHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(200)
-	w.Write([]byte("Success"))
+func loginHandler(w http.ResponseWriter, _ *http.Request) {
+	// w.WriteHeader(200)
+	// w.Write([]byte("Success"))
+	utils.Render(w, login.LoginTemplate())
 }

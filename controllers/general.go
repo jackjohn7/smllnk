@@ -5,7 +5,9 @@ import (
 
 	"github.com/jackjohn7/smllnk/db/repositories"
 	mids "github.com/jackjohn7/smllnk/middlewares"
+	"github.com/jackjohn7/smllnk/public/views/index"
 	"github.com/jackjohn7/smllnk/sessions"
+	"github.com/jackjohn7/smllnk/utils"
 )
 
 type GeneralController struct {
@@ -27,11 +29,12 @@ func NewGeneralController(
 }
 
 func (c *GeneralController) Register(mux *http.ServeMux) error {
-	mux.HandleFunc("GET /", c.auth.AuthCtx(c.auth.Restrict(IndexHandler)))
+	mux.HandleFunc("GET /", c.auth.AuthCtx(c.auth.Restrict(indexHandler)))
 	return nil
 }
 
-func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(200)
-	w.Write([]byte("Hello, world"))
+func indexHandler(w http.ResponseWriter, _ *http.Request) {
+	// w.WriteHeader(200)
+	// w.Write([]byte("Hello, world"))
+	utils.Render(w, index.IndexTemplate())
 }

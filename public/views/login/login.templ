@@ -1,0 +1,16 @@
+package login
+
+import "github.com/jackjohn7/smllnk/public/views/layout"
+
+templ LoginTemplate() {
+  @layout.Base("Login to SmlLnk", "SmlLnk - Completely free and dead-simple link shortener")
+  <form action="/login" method="POST">
+    <label>Email:</label>
+    <input name="email" />
+    <button type="submit">Submit</button>
+  </form>
+  <p>
+    Upon entering an email address, you will be emailed a 
+    link that will authenticate your session.
+  </p>
+}
