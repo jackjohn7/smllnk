@@ -22,6 +22,11 @@ type Controller interface {
 	Register(*http.ServeMux) error
 }
 
+type staticDirectory struct {
+	urlPath    string
+	fileServer http.Handler
+}
+
 /*
 App is what contains the echo server, registered controllers, and global state.
 */
@@ -31,6 +36,7 @@ type App struct {
 	server      *http.Server
 	middlewares []MiddlewareFunc
 	controllers []Controller
+	staticPaths []*staticDirectory
 }
 
 /*
@@ -42,6 +48,7 @@ func New(addr string, controllers []Controller) *App {
 		mux:         http.NewServeMux(),
 		middlewares: make([]MiddlewareFunc, 0),
 		controllers: controllers,
+		staticPaths: make([]*staticDirectory, 0),
 	}
 }
 
@@ -50,6 +57,17 @@ Supplies middleware to echo server
 */
 func (app *App) WithMiddleware(f MiddlewareFunc) *App {
 	app.middlewares = append(app.middlewares, f)
+	return app
+}
+
+/*
+Serve static directory
+*/
+func (app *App) WithStaticDirectory(urlPath string, filePath string) *App {
+	app.staticPaths = append(app.staticPaths, &staticDirectory{
+		urlPath:    urlPath,
+		fileServer: http.FileServer(http.Dir(filePath)),
+	})
 	return app
 }
 
@@ -74,6 +92,10 @@ func (app *App) Serve() {
 	// register controllers
 	for _, cont := range app.controllers {
 		cont.Register(app.mux)
+	}
+
+	for _, sd := range app.staticPaths {
+		app.mux.Handle(sd.urlPath, sd.fileServer)
 	}
 
 	// Using negroni's panic-recovery middleware to prevent panics from destroying the app

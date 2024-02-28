@@ -29,7 +29,7 @@ func LoginTemplate() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form action=\"/login\" method=\"POST\"><label>Email:</label> <input name=\"email\"> <button type=\"submit\">Submit</button></form><p>Upon entering an email address, you will be emailed a  link that will authenticate your session.</p>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form action=\"/login\" method=\"POST\"><label class=\"text-green-400\">Email:</label> <input name=\"email\"> <button type=\"submit\">Submit</button></form><p>Upon entering an email address, you will be emailed a  link that will authenticate your session.</p>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

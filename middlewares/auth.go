@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -65,6 +66,7 @@ func (a *Auth) AuthCtx(next http.HandlerFunc) http.HandlerFunc {
 
 func (a *Auth) Restrict(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("Here in auth")
 		// get auth info
 		ac := r.Context().Value("AuthCtx")
 		if ac == nil {

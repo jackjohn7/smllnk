@@ -28,7 +28,7 @@ func main() {
 	app := app.New(addr, []app.Controller{
 		controllers.NewGeneralController(repos, sessionStore, auth),
 		controllers.NewAccountsController(repos, sessionStore, auth),
-	})
+	}).WithStaticDirectory("GET /public/styles/*", ".") // Handle will sum the paths here
 
 	// global middleware
 	app.WithMiddleware(mids.NewLogger(app.Mux()).Start())
