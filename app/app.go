@@ -3,12 +3,15 @@ package app
 import (
 	"context"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"time"
 
-	"github.com/labstack/echo/v4"
+	"github.com/urfave/negroni"
 )
+
+type MiddlewareFunc func(http.HandlerFunc) http.HandlerFunc
 
 /*
 A controller registers related handler functions and assigns them to endpoints
@@ -16,7 +19,7 @@ A controller registers related handler functions and assigns them to endpoints
 A controller must have the `Register` method defined.
 */
 type Controller interface {
-	Register(*echo.Echo) error
+	Register(*http.ServeMux) error
 }
 
 /*
@@ -24,7 +27,9 @@ App is what contains the echo server, registered controllers, and global state.
 */
 type App struct {
 	addr        string
-	server      *echo.Echo
+	mux         *http.ServeMux
+	server      *http.Server
+	middlewares []MiddlewareFunc
 	controllers []Controller
 }
 
@@ -34,7 +39,8 @@ Creates a new App struct with an address and a set of controllers
 func New(addr string, controllers []Controller) *App {
 	return &App{
 		addr:        addr,
-		server:      echo.New(),
+		mux:         http.NewServeMux(),
+		middlewares: make([]MiddlewareFunc, 0),
 		controllers: controllers,
 	}
 }
@@ -42,18 +48,23 @@ func New(addr string, controllers []Controller) *App {
 /*
 Supplies middleware to echo server
 */
-func (app *App) WithMiddleware(f echo.MiddlewareFunc) *App {
-	app.server.Use(f)
+func (app *App) WithMiddleware(f MiddlewareFunc) *App {
+	app.middlewares = append(app.middlewares, f)
 	return app
 }
 
 /*
-Returns the Echo server of the App.
-
-This is useful for adding global middleware
+Returns the *http.Server of the App.
 */
-func (app *App) Server() *echo.Echo {
+func (app *App) Server() *http.Server {
 	return app.server
+}
+
+/*
+Return *http.ServeMux of the application
+*/
+func (app *App) Mux() *http.ServeMux {
+	return app.mux
 }
 
 /*
@@ -62,17 +73,26 @@ Registers controllers and starts Echo server with graceful shutdown
 func (app *App) Serve() {
 	// register controllers
 	for _, cont := range app.controllers {
-		cont.Register(app.Server())
+		cont.Register(app.mux)
+	}
+
+	// Using negroni's panic-recovery middleware to prevent panics from destroying the app
+	n := negroni.New()
+	n.Use(negroni.NewRecovery())
+	n.UseHandler(app.mux)
+
+	app.server = &http.Server{
+		Addr:    app.addr,
+		Handler: ApplyMiddleware(n, app.middlewares),
 	}
 
 	// start with graceful shutdown stuff (from Echo cookbook)
-
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 	// Start server in separate goroutine
 	go func() {
-		if err := app.server.Start(app.addr); err != nil {
-			log.Fatal("shutting down the server")
+		if err := app.server.ListenAndServe(); err != nil {
+			log.Fatalf("shutting down the server: %s", err.Error())
 		}
 	}()
 
@@ -81,6 +101,6 @@ func (app *App) Serve() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	if err := app.server.Shutdown(ctx); err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 }

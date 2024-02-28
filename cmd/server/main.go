@@ -31,7 +31,7 @@ func main() {
 	})
 
 	// global middleware
-	app.WithMiddleware(mids.NewLogger(app.Server()).Start())
+	app.WithMiddleware(mids.NewLogger(app.Mux()).Start())
 
 	// register controllers and serve
 	app.Serve()

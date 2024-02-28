@@ -1,11 +1,11 @@
 package controllers
 
 import (
+	"net/http"
+
 	repos "github.com/jackjohn7/smllnk/db/repositories"
 	mids "github.com/jackjohn7/smllnk/middlewares"
 	"github.com/jackjohn7/smllnk/sessions"
-
-	"github.com/labstack/echo/v4"
 )
 
 type AccountsController struct {
@@ -26,11 +26,12 @@ func NewAccountsController(
 	}
 }
 
-func (c *AccountsController) Register(app *echo.Echo) error {
-	app.GET("/login", loginHandler)
+func (c *AccountsController) Register(mux *http.ServeMux) error {
+	mux.HandleFunc("GET /login", loginHandler)
 	return nil
 }
 
-func loginHandler(c echo.Context) error {
-	return c.String(200, "Login Page")
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(200)
+	w.Write([]byte("Success"))
 }
