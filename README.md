@@ -14,6 +14,9 @@ git clone https://github.com/jackjohn7/smllnk.git
 [goose](https://github.com/pressly/goose),
 [templ](https://templ.guide))
 
+You can install TailwindCSS either using the standalone CLI tool or by using 
+npm. Just ensure it's in your path.
+
 ```bash
 go install github.com/cosmtrek/air@latest # install air
 go install github.com/a-h/templ/cmd/templ@latest # install templ
