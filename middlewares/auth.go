@@ -74,3 +74,15 @@ func (a *Auth) Restrict(next http.HandlerFunc) http.HandlerFunc {
 		}
 	}
 }
+
+func (a *Auth) RedirectIfAuthed(destination string, next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// get auth info
+		ac := r.Context().Value("AuthCtx")
+		if ac != nil {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+		} else {
+			next(w, r)
+		}
+	}
+}

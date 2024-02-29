@@ -31,8 +31,8 @@ func NewAccountsController(
 }
 
 func (c *AccountsController) Register(mux *http.ServeMux) error {
-	mux.HandleFunc("GET /login", loginPageHandler)
-	mux.HandleFunc("POST /login", loginHandler)
+	mux.HandleFunc("GET /login", c.auth.RedirectIfAuthed("/", loginPageHandler))
+	mux.HandleFunc("POST /login", c.auth.RedirectIfAuthed("/", loginHandler))
 	return nil
 }
 
