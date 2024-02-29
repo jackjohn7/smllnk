@@ -5,10 +5,16 @@ templ Base(title string, description string) {
     <head>
       <title>{title}</title>
       <meta name="description" content={description} />
-      <link href="/public/styles/tw.css" rel="stylesheet" />
+      <link href="/public/styles/utilities.css" rel="stylesheet" />
+      <link href="/public/styles/custom.css" rel="stylesheet" />
     </head>
     <body>
-      { children... }
+      <div class="bg-[#121619] h-screen w-screen">
+        <div class="bg-[#72e15a] p-2">
+          <a href="/" class="text-black font-bold">SmlLnk</a>
+        </div>
+        { children... }
+      </div>
     </body>
   </html>
 }

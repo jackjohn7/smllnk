@@ -10,25 +10,30 @@ import (
 )
 
 type (
-	DbEnv struct {
+	dbEnv struct {
 		DATABASE_URL string
 		REDIS_URL    string
-		REDIS_PW string
+		REDIS_PW     string
 	}
 
-	AuthEnv struct {
+	authEnv struct {
 		SessionSecret []byte
 	}
 
-	Environment struct {
+	security struct {
+		CSRF_KEY string
+	}
+
+	env struct {
 		IsProd  bool
 		Port    string
-		DbEnv   DbEnv
-		AuthEnv AuthEnv
+		DbEnv   dbEnv
+		AuthEnv authEnv
+		Sec     security
 	}
 )
 
-var Env *Environment
+var Env *env
 
 func init() {
 	// parse environment into struct
@@ -60,16 +65,23 @@ func init() {
 		sessionSecret = sec
 	}
 
-	Env = &Environment{
-		DbEnv: DbEnv{
+	Env = &env{
+		DbEnv: dbEnv{
 			DATABASE_URL: os.Getenv("DATABASE_URL"),
 			REDIS_URL:    os.Getenv("REDIS_URL"),
 			REDIS_PW:     os.Getenv("REDIS_PASSWORD"),
 		},
 		IsProd: buildEnv == "PROD",
 		Port:   port,
-		AuthEnv: AuthEnv{
+		AuthEnv: authEnv{
 			SessionSecret: sessionSecret,
 		},
+		Sec: security{
+			CSRF_KEY: os.Getenv("CSRF_KEY"),
+		},
+	}
+
+	if Env.Sec.CSRF_KEY == "" {
+		panic("Missing 32-byte long CSRF_KEY. Add it to your environment.")
 	}
 }

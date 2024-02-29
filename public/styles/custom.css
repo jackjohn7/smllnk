@@ -1,0 +1,17 @@
+:root {
+  --bg_up_one: #1f272f
+}
+
+.btn {
+  background: #72e15a;
+  border-radius: 0.5em;
+  padding: 0.2em;
+}
+
+.btn-pink {
+  background: #e15ad9;
+}
+
+.bg-up-1 {
+  background: var(--bg_up_one);
+}

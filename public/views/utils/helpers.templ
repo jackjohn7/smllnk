@@ -1,0 +1,12 @@
+package utils
+
+//func CsrfHelper(h template.HTML) templ.Component {
+//	return templ.ComponentFunc(func(_ context.Context, w io.Writer) error {
+//		_, err := io.WriteString(w, string(h))
+//		return err
+//	})
+//}
+
+templ CsrfHelper(token string) {
+	<input type="hidden" name="gorilla.csrf.Token" value={ token }/>
+}

@@ -1,5 +1,5 @@
 tailwind-watch:
-	tailwindcss -o ./public/styles/tw.css --watch
+	tailwindcss -i input.css -o ./public/styles/utilities.css --watch
 
 tailwind-build:
-	tailwindcss -o ./public/styles/tw.css --minify
+	tailwindcss -i input.css -o ./public/styles/utilities.css --minify

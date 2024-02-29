@@ -2,12 +2,15 @@ package app
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
 
+	"github.com/gorilla/csrf"
+	"github.com/jackjohn7/smllnk/environment"
 	"github.com/urfave/negroni"
 )
 
@@ -103,9 +106,11 @@ func (app *App) Serve() {
 	n.Use(negroni.NewRecovery())
 	n.UseHandler(app.mux)
 
+	CSRF := csrf.Protect([]byte(environment.Env.Sec.CSRF_KEY))
+
 	app.server = &http.Server{
 		Addr:    app.addr,
-		Handler: ApplyMiddleware(n, app.middlewares),
+		Handler: CSRF(applyMiddleware(n, app.middlewares)),
 	}
 
 	// start with graceful shutdown stuff (from Echo cookbook)
@@ -117,6 +122,7 @@ func (app *App) Serve() {
 			log.Fatalf("shutting down the server: %s", err.Error())
 		}
 	}()
+	fmt.Printf("Running on port %s\n", app.addr)
 
 	// Wait for interrupt signal to gracefully shutdown the server with a timeout of 10 seconds.
 	<-ctx.Done()

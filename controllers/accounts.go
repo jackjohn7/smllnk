@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/gorilla/csrf"
 	repos "github.com/jackjohn7/smllnk/db/repositories"
 	mids "github.com/jackjohn7/smllnk/middlewares"
 	"github.com/jackjohn7/smllnk/public/views/login"
@@ -29,12 +31,29 @@ func NewAccountsController(
 }
 
 func (c *AccountsController) Register(mux *http.ServeMux) error {
-	mux.HandleFunc("GET /login", loginHandler)
+	mux.HandleFunc("GET /login", loginPageHandler)
+	mux.HandleFunc("POST /login", loginHandler)
 	return nil
 }
 
-func loginHandler(w http.ResponseWriter, _ *http.Request) {
+func loginPageHandler(w http.ResponseWriter, r *http.Request) {
 	// w.WriteHeader(200)
 	// w.Write([]byte("Success"))
-	utils.Render(w, login.LoginTemplate())
+	utils.Render(w, login.LoginTemplate(csrf.Token(r), ""))
+}
+
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+
+	email := r.FormValue("email")
+	if email == "" {
+		// no email provided. Return Error
+		w.WriteHeader(http.StatusBadRequest)
+		utils.Render(w, login.LoginTemplate(csrf.Token(r), "No email provided, lil bro"))
+		return
+	}
+
+	// if there is no user, create one
+
+	fmt.Println(email)
 }

@@ -1,16 +1,27 @@
 package login
 
 import "github.com/jackjohn7/smllnk/public/views/layout"
+import "github.com/jackjohn7/smllnk/public/views/utils"
 
-templ LoginTemplate() {
-  @layout.Base("Login to SmlLnk", "SmlLnk - Completely free and dead-simple link shortener")
-  <form action="/login" method="POST">
-    <label class="text-green-400">Email:</label>
-    <input name="email" />
-    <button type="submit">Submit</button>
-  </form>
-  <p>
-    Upon entering an email address, you will be emailed a 
-    link that will authenticate your session.
-  </p>
+templ LoginTemplate(csrfToken string, emailError string) {
+  @layout.Base("Login to SmlLnk", "SmlLnk - Completely free and dead-simple link shortener") {
+    <h1 class="text-white text-center text-xl">Welcome to simplicity!</h1>
+    <form action="/login" method="POST" class="flex flex-col items-center">
+      <div class="flex flex-col items-center space-y-2 p-4 w-[50%]">
+        <!--<label class="text-[#72e15a]">Email:</label>-->
+        <input name="email" placeholder="Email" class="bg-up-1 rounded-sm px-2 py-2 w-full"/>
+        if emailError != "" {
+          <p class="text-red-500">
+            { emailError }
+          </p>
+        }
+        <button class="btn w-full" type="submit">Submit</button>
+      </div>
+      @utils.CsrfHelper(csrfToken)
+    </form>
+    <p class="text-white text-center">
+      Upon entering an email address, you will be emailed a
+      link that will authenticate your session.
+    </p>
+  }
 }
