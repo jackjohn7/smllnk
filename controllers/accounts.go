@@ -31,18 +31,18 @@ func NewAccountsController(
 }
 
 func (c *AccountsController) Register(mux *http.ServeMux) error {
-	mux.HandleFunc("GET /login", c.auth.RedirectIfAuthed("/", loginPageHandler))
-	mux.HandleFunc("POST /login", c.auth.RedirectIfAuthed("/", loginHandler))
+	mux.HandleFunc("GET /login", c.auth.RedirectIfAuthed("/", c.loginPageHandler))
+	mux.HandleFunc("POST /login", c.auth.RedirectIfAuthed("/", c.loginHandler))
 	return nil
 }
 
-func loginPageHandler(w http.ResponseWriter, r *http.Request) {
+func (c *AccountsController) loginPageHandler(w http.ResponseWriter, r *http.Request) {
 	// w.WriteHeader(200)
 	// w.Write([]byte("Success"))
 	utils.Render(w, login.LoginTemplate(csrf.Token(r), ""))
 }
 
-func loginHandler(w http.ResponseWriter, r *http.Request) {
+func (c *AccountsController) loginHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	email := r.FormValue("email")
@@ -54,6 +54,32 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// if there is no user, create one
+	user, err := c.repositories.Users.GetByEmail(email)
+	if err != nil {
+		user, err = c.repositories.Users.Create(email)
+		if err != nil {
+			fmt.Println("err here")
+			fmt.Println(err)
+			// if something goes wrong creating user, just write err (temp)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+		}
+	}
+
+	// create session for user
+	session, err := c.sessionStore.Create(user, r.UserAgent())
+	if err != nil {
+		w.WriteHeader(http.StatusNotImplemented)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	// set session cookie
+	r.AddCookie(&http.Cookie{
+		Name:  "session",
+		Value: session.Id,
+	})
 
 	fmt.Println(email)
+	http.Redirect(w, r, "/", http.StatusSeeOther) // in the future, redirect to value in query param
 }
