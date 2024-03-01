@@ -45,3 +45,14 @@ func GenerateSessionId() (string, error) {
 	}
 	return base64.StdEncoding.EncodeToString(bytes), nil
 }
+
+/*
+Generates a base-64 encoded session id
+*/
+func GenerateMagicLinkId() (string, error) {
+	bytes, err := GenerateRandomBytes(22)
+	if err != nil {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(bytes), nil
+}
