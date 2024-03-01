@@ -3,6 +3,7 @@ package utils
 import (
 	crand "crypto/rand"
 	"encoding/base64"
+	"math/big"
 	"math/rand"
 )
 
@@ -50,9 +51,28 @@ func GenerateSessionId() (string, error) {
 Generates a base-64 encoded session id
 */
 func GenerateMagicLinkId() (string, error) {
-	bytes, err := GenerateRandomBytes(22)
-	if err != nil {
-		return "", err
+	return generateRandomString(32)
+}
+
+/*
+Cryptographically secure randomly generated string
+*/
+func generateRandomString(length int) (string, error) {
+	// Get the length of the alphabet
+	alphabetLength := big.NewInt(int64(len(alphabet)))
+
+	// Initialize a byte slice to store the random string
+	randomBytes := make([]rune, length)
+
+	// Generate random bytes
+	for i := 0; i < length; i++ {
+		randomIndex, err := crand.Int(crand.Reader, alphabetLength)
+		if err != nil {
+			return "", err
+		}
+		randomBytes[i] = alphabet[randomIndex.Int64()]
 	}
-	return base64.StdEncoding.EncodeToString(bytes), nil
+
+	// Convert byte slice to string
+	return string(randomBytes), nil
 }

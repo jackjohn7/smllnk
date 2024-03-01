@@ -13,7 +13,7 @@ import "bytes"
 import "github.com/jackjohn7/smllnk/public/views/layout"
 import "github.com/jackjohn7/smllnk/public/views/utils"
 
-func LoginTemplate(csrfToken string, emailError string) templ.Component {
+func LoginTemplate(baseProps layout.BaseProps, emailError string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -59,7 +59,7 @@ func LoginTemplate(csrfToken string, emailError string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = utils.CsrfHelper(csrfToken).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = utils.CsrfHelper(baseProps.CsrfToken).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -72,7 +72,7 @@ func LoginTemplate(csrfToken string, emailError string) templ.Component {
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = layout.Base("Login to SmlLnk", "SmlLnk - Completely free and dead-simple link shortener").Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layout.Base(baseProps).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

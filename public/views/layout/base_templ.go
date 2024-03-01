@@ -10,7 +10,17 @@ import "context"
 import "io"
 import "bytes"
 
-func Base(title string, description string) templ.Component {
+import "github.com/jackjohn7/smllnk/middlewares"
+import "github.com/jackjohn7/smllnk/public/views/utils"
+
+type BaseProps struct {
+	Title       string
+	Description string
+	AuthCtx     *middlewares.AuthCtx
+	CsrfToken   string
+}
+
+func Base(props BaseProps) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -28,9 +38,9 @@ func Base(title string, description string) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(title)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(props.Title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/layout/base.templ`, Line: 5, Col: 19}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/layout/base.templ`, Line: 15, Col: 25}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -40,11 +50,29 @@ func Base(title string, description string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(description))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(props.Description))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><link href=\"/public/styles/utilities.css\" rel=\"stylesheet\"><link href=\"/public/styles/custom.css\" rel=\"stylesheet\"></head><body><div class=\"bg-[#121619] h-screen w-screen\"><div class=\"bg-[#72e15a] p-2\"><a href=\"/\" class=\"text-black font-bold\">SmlLnk</a></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><link href=\"/public/styles/utilities.css\" rel=\"stylesheet\"><link href=\"/public/styles/custom.css\" rel=\"stylesheet\"></head><body><div class=\"bg-[#121619] h-screen w-screen\"><div class=\"bg-[#72e15a] p-2 justify-between flex flex-row\"><a href=\"/\" class=\"text-black font-bold\">SmlLnk</a> ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if props.AuthCtx != nil {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form action=\"/logout\" method=\"POST\"><button type=\"submit\">Log Out</button>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = utils.CsrfHelper(props.CsrfToken).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</form>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

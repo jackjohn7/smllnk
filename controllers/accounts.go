@@ -3,10 +3,12 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/csrf"
 	repos "github.com/jackjohn7/smllnk/db/repositories"
 	mids "github.com/jackjohn7/smllnk/middlewares"
+	"github.com/jackjohn7/smllnk/public/views/layout"
 	"github.com/jackjohn7/smllnk/public/views/login"
 	"github.com/jackjohn7/smllnk/sessions"
 	"github.com/jackjohn7/smllnk/utils"
@@ -34,11 +36,17 @@ func (c *AccountsController) Register(mux *http.ServeMux) error {
 	mux.HandleFunc("GET /login", c.auth.AuthCtx(c.auth.RedirectIfAuthed("/", c.loginPageHandler)))
 	mux.HandleFunc("POST /login", c.auth.AuthCtx(c.auth.RedirectIfAuthed("/", c.loginHandler)))
 	mux.HandleFunc("GET /magic/{id}", c.auth.AuthCtx(c.auth.RedirectIfAuthed("/", c.magicHandler)))
+	mux.HandleFunc("POST /logout", c.auth.AuthCtx(c.auth.Restrict(c.logoutHandler)))
 	return nil
 }
 
 func (c *AccountsController) loginPageHandler(w http.ResponseWriter, r *http.Request) {
-	utils.Render(w, login.LoginTemplate(csrf.Token(r), ""))
+	utils.Render(w, login.LoginTemplate(layout.BaseProps{
+		Title:       "SmlLnk - Login",
+		Description: "Get started sharing links today!",
+		AuthCtx:     nil,
+		CsrfToken:   csrf.Token(r),
+	}, ""))
 }
 
 func (c *AccountsController) loginHandler(w http.ResponseWriter, r *http.Request) {
@@ -48,7 +56,12 @@ func (c *AccountsController) loginHandler(w http.ResponseWriter, r *http.Request
 	if email == "" {
 		// no email provided. Return Error
 		w.WriteHeader(http.StatusBadRequest)
-		utils.Render(w, login.LoginTemplate(csrf.Token(r), "No email provided, lil bro"))
+		utils.Render(w, login.LoginTemplate(layout.BaseProps{
+			Title:       "SmlLnk - Login",
+			Description: "Get started sharing links today!",
+			AuthCtx:     nil,
+			CsrfToken:   csrf.Token(r),
+		}, "No email provided, lil bro"))
 		return
 	}
 
@@ -69,7 +82,7 @@ func (c *AccountsController) loginHandler(w http.ResponseWriter, r *http.Request
 	*/
 
 	// create magic request
-	mr, err := c.repositories.MagicRequests.Create(user.Id)
+	_, err = c.repositories.MagicRequests.Create(user.Id)
 	if err != nil {
 		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -77,35 +90,12 @@ func (c *AccountsController) loginHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	fmt.Printf("mr.id = %s\n", mr.Id)
-	fmt.Printf("/magic/%s\n", mr.Id)
-
-	// create session for user
-	//session, err := c.sessionStore.Create(user, r.UserAgent())
-	//if err != nil {
-	//	w.WriteHeader(http.StatusNotImplemented)
-	//	w.Write([]byte(err.Error()))
-	//	return
-	//}
-
-	//// set session cookie (TEMP)
-	//http.SetCookie(w, &http.Cookie{
-	//	Name:     c.auth.SessionCookieKey,
-	//	Value:    session.Id,
-	//	Expires:  session.ExpiresAt,
-	//	SameSite: http.SameSiteStrictMode,
-	//})
-
-	// Temporarily redirect. Return message to check email later
-	// http.Redirect(w, r, "/", http.StatusSeeOther) // in the future, redirect to value in query param
-
 	w.Write([]byte(fmt.Sprintf("Login link sent to %s", email)))
 }
 
 func (c *AccountsController) magicHandler(w http.ResponseWriter, r *http.Request) {
 	// get the session
 	magicId := r.PathValue("id")
-	fmt.Printf("%s\n", magicId)
 
 	mr, err := c.repositories.MagicRequests.Get(magicId)
 	if err != nil {
@@ -140,4 +130,28 @@ func (c *AccountsController) magicHandler(w http.ResponseWriter, r *http.Request
 	})
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func (c *AccountsController) logoutHandler(w http.ResponseWriter, r *http.Request) {
+	// get auth info
+	acRaw := r.Context().Value("AuthCtx")
+	if acRaw == nil {
+		return
+	}
+
+	ac := acRaw.(*mids.AuthCtx)
+
+	// delete session
+	c.sessionStore.Delete(ac.Session.Id)
+
+	// set cookie to delete
+	http.SetCookie(w, &http.Cookie{
+		Name:     c.auth.SessionCookieKey,
+		Value:    ac.Session.Id,
+		Expires:  time.Now(),
+		SameSite: http.SameSiteStrictMode,
+		Path:     "/",
+	})
+
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }

@@ -2,8 +2,8 @@ package index
 
 import "github.com/jackjohn7/smllnk/public/views/layout"
 
-templ IndexTemplate() {
-  @layout.Base("SmlLnk", "SmlLnk - Simplest and most free link shortener") {
+templ IndexTemplate(baseProps layout.BaseProps) {
+  @layout.Base(baseProps) {
     <div>
       <h1 class="text-blue-400 text-sm">Hello, authenticated user!</h1>
     </div>

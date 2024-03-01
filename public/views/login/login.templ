@@ -3,8 +3,8 @@ package login
 import "github.com/jackjohn7/smllnk/public/views/layout"
 import "github.com/jackjohn7/smllnk/public/views/utils"
 
-templ LoginTemplate(csrfToken string, emailError string) {
-  @layout.Base("Login to SmlLnk", "SmlLnk - Completely free and dead-simple link shortener") {
+templ LoginTemplate(baseProps layout.BaseProps, emailError string) {
+  @layout.Base(baseProps) {
     <h1 class="text-white text-center text-xl">Welcome to simplicity!</h1>
     <form action="/login" method="POST" class="flex flex-col items-center">
       <div class="flex flex-col items-center space-y-2 p-4 w-[50%]">
@@ -17,7 +17,7 @@ templ LoginTemplate(csrfToken string, emailError string) {
         }
         <button class="btn w-full" type="submit">Submit</button>
       </div>
-      @utils.CsrfHelper(csrfToken)
+      @utils.CsrfHelper(baseProps.CsrfToken)
     </form>
     <p class="text-white text-center">
       Upon entering an email address, you will be emailed a

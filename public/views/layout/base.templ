@@ -1,17 +1,33 @@
 package layout
 
-templ Base(title string, description string) {
+import "github.com/jackjohn7/smllnk/middlewares"
+import "github.com/jackjohn7/smllnk/public/views/utils"
+
+type BaseProps struct { 
+  Title string 
+  Description string
+  AuthCtx *middlewares.AuthCtx
+  CsrfToken string
+}
+
+templ Base(props BaseProps) {
   <html>
     <head>
-      <title>{title}</title>
-      <meta name="description" content={description} />
+      <title>{props.Title}</title>
+      <meta name="description" content={props.Description} />
       <link href="/public/styles/utilities.css" rel="stylesheet" />
       <link href="/public/styles/custom.css" rel="stylesheet" />
     </head>
     <body>
       <div class="bg-[#121619] h-screen w-screen">
-        <div class="bg-[#72e15a] p-2">
+        <div class="bg-[#72e15a] p-2 justify-between flex flex-row">
           <a href="/" class="text-black font-bold">SmlLnk</a>
+          if props.AuthCtx != nil {
+            <form action="/logout" method="POST">
+              <button type="submit">Log Out</button>
+              @utils.CsrfHelper(props.CsrfToken)
+            </form>
+          }
         </div>
         { children... }
       </div>
