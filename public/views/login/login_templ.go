@@ -32,7 +32,7 @@ func LoginTemplate(baseProps layout.BaseProps, emailError string) templ.Componen
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-white text-center text-xl\">Welcome to simplicity!</h1><form action=\"/login\" method=\"POST\" class=\"flex flex-col items-center\"><div class=\"flex flex-col items-center space-y-2 p-4 w-[50%]\"><!--<label class=\"text-[#72e15a]\">Email:</label>--><input name=\"email\" placeholder=\"Email\" class=\"bg-up-1 rounded-sm px-2 py-2 w-full\"> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-white text-center text-xl\">Welcome to simplicity!</h1><form action=\"/login\" method=\"POST\" class=\"flex flex-col items-center\"><div class=\"flex flex-col items-center space-y-2 p-4 w-[50%]\"><!--<label class=\"text-[#72e15a]\">Email:</label>--><input name=\"email\" placeholder=\"Email\" class=\"bg-up-1 rounded-sm px-2 py-2 w-full text-white\"> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -55,7 +55,7 @@ func LoginTemplate(baseProps layout.BaseProps, emailError string) templ.Componen
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn w-full\" type=\"submit\">Submit</button></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn w-full font-bold\" type=\"submit\">Submit</button></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -760,12 +760,12 @@ select {
   border-radius: 0.125rem;
 }
 
-.bg-\[\#121619\] {
+.bg-base-dark {
   --tw-bg-opacity: 1;
   background-color: rgb(18 22 25 / var(--tw-bg-opacity));
 }
 
-.bg-\[\#72e15a\] {
+.bg-primary-green {
   --tw-bg-opacity: 1;
   background-color: rgb(114 225 90 / var(--tw-bg-opacity));
 }
@@ -816,9 +816,9 @@ select {
   color: rgb(0 0 0 / var(--tw-text-opacity));
 }
 
-.text-blue-400 {
+.text-primary-green {
   --tw-text-opacity: 1;
-  color: rgb(96 165 250 / var(--tw-text-opacity));
+  color: rgb(114 225 90 / var(--tw-text-opacity));
 }
 
 .text-red-500 {

@@ -82,13 +82,16 @@ func (c *AccountsController) loginHandler(w http.ResponseWriter, r *http.Request
 	*/
 
 	// create magic request
-	_, err = c.repositories.MagicRequests.Create(user.Id)
+	mr, err := c.repositories.MagicRequests.Create(user.Id)
 	if err != nil {
 		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Something went wrong creating Magic Login Link"))
 		return
 	}
+
+	// temporarily just output mr.Id to stdout
+	fmt.Printf("link: /magic/%s\n", mr.Id)
 
 	w.Write([]byte(fmt.Sprintf("Login link sent to %s", email)))
 }
