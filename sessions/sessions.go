@@ -8,11 +8,12 @@ import (
 
 type (
 	Session struct {
-		Id          string
-		UserId      string
-		UserAgent   string
-		CreatedDate time.Time
-		UpdatedDate time.Time
+		Id          string    `redis:"id"`
+		UserId      string    `redis:"user_id"`
+		UserAgent   string    `redis:"user_agent"`
+		CreatedDate time.Time `redis:"created_date"`
+		UpdatedDate time.Time `redis:"updated_date"`
+		ExpiresAt   time.Time `redis:"expires_at"`
 	}
 
 	SessionStore interface {

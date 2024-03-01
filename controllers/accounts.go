@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gorilla/csrf"
@@ -31,8 +30,8 @@ func NewAccountsController(
 }
 
 func (c *AccountsController) Register(mux *http.ServeMux) error {
-	mux.HandleFunc("GET /login", c.auth.RedirectIfAuthed("/", c.loginPageHandler))
-	mux.HandleFunc("POST /login", c.auth.RedirectIfAuthed("/", c.loginHandler))
+	mux.HandleFunc("GET /login", c.auth.AuthCtx(c.auth.RedirectIfAuthed("/", c.loginPageHandler)))
+	mux.HandleFunc("POST /login", c.auth.AuthCtx(c.auth.RedirectIfAuthed("/", c.loginHandler)))
 	return nil
 }
 
@@ -58,13 +57,16 @@ func (c *AccountsController) loginHandler(w http.ResponseWriter, r *http.Request
 	if err != nil {
 		user, err = c.repositories.Users.Create(email)
 		if err != nil {
-			fmt.Println("err here")
-			fmt.Println(err)
 			// if something goes wrong creating user, just write err (temp)
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
 		}
 	}
+
+	/*
+		Temporarily, I'm just going to immediately log in the user.
+		In the future, the user should be emailed a magic link instead
+	*/
 
 	// create session for user
 	session, err := c.sessionStore.Create(user, r.UserAgent())
@@ -74,12 +76,13 @@ func (c *AccountsController) loginHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	// set session cookie
-	r.AddCookie(&http.Cookie{
-		Name:  "session",
-		Value: session.Id,
+	// set session cookie (TEMP)
+	http.SetCookie(w, &http.Cookie{
+		Name:     c.auth.SessionCookieKey,
+		Value:    session.Id,
+		Expires:  session.ExpiresAt,
+		SameSite: http.SameSiteStrictMode,
 	})
 
-	fmt.Println(email)
 	http.Redirect(w, r, "/", http.StatusSeeOther) // in the future, redirect to value in query param
 }

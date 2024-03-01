@@ -47,33 +47,33 @@ func (r *UserRepositoryPG) GetAll() (users []*models.User, err error) {
 	return []*models.User{}, errors.New("Unimplemented")
 }
 
-func (r *UserRepositoryPG) GetById(id string) (user *models.User, err error) {
+func (r *UserRepositoryPG) GetById(id string) (*models.User, error) {
 	rows, err := r.db.Queryx("SELECT * FROM users u WHERE u.id = $1", id)
 	if err != nil {
 		return nil, err
 	}
-	users := make([]*models.User, 0)
+	users := make([]models.User, 0)
 	for rows.Next() {
-		var u *models.User
+		var u models.User
 		err = rows.StructScan(&u)
 		users = append(users, u)
 	}
 
 	if len(users) != 1 {
-		return nil, errors.New("No user found by this ID")
+		return nil, errors.New("No user found by this id")
 	}
 
-	return users[0], nil
+	return &users[0], nil
 }
 
-func (r *UserRepositoryPG) GetByEmail(email string) (user *models.User, err error) {
+func (r *UserRepositoryPG) GetByEmail(email string) (*models.User, error) {
 	rows, err := r.db.Queryx("SELECT * FROM users u WHERE u.email = $1", email)
 	if err != nil {
 		return nil, err
 	}
-	users := make([]*models.User, 0)
+	users := make([]models.User, 0)
 	for rows.Next() {
-		var u *models.User
+		var u models.User
 		err = rows.StructScan(&u)
 		users = append(users, u)
 	}
@@ -82,5 +82,5 @@ func (r *UserRepositoryPG) GetByEmail(email string) (user *models.User, err erro
 		return nil, errors.New("No user found by this email")
 	}
 
-	return users[0], nil
+	return &users[0], nil
 }

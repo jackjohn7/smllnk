@@ -12,7 +12,7 @@ import (
 
 type (
 	Auth struct {
-		sessionCookieKey string
+		SessionCookieKey string
 		repos            *repositories.Repositories
 		store            sessions.SessionStore
 	}
@@ -23,9 +23,10 @@ type (
 	}
 )
 
-func NewAuth(key string, sessStore sessions.SessionStore) *Auth {
+func NewAuth(key string, repos *repositories.Repositories, sessStore sessions.SessionStore) *Auth {
 	return &Auth{
-		sessionCookieKey: key,
+		SessionCookieKey: key,
+		repos:            repos,
 		store:            sessStore,
 	}
 }
@@ -34,7 +35,7 @@ func (a *Auth) AuthCtx(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// validate that the user has a session
 		// get session token from cookies
-		cookie, err := r.Cookie(a.sessionCookieKey)
+		cookie, err := r.Cookie(a.SessionCookieKey)
 		if err != nil {
 			next(w, r)
 			return
@@ -44,8 +45,8 @@ func (a *Auth) AuthCtx(next http.HandlerFunc) http.HandlerFunc {
 		session, err := a.store.Get(sessionId)
 		if err != nil {
 			// their session seems to be erroneous or expired. Redirect to login and clear cookie
-			r.AddCookie(&http.Cookie{
-				Name:     a.sessionCookieKey,
+			http.SetCookie(w, &http.Cookie{
+				Name:     a.SessionCookieKey,
 				Value:    "",
 				Path:     "/",
 				Expires:  time.Unix(0, 0),
@@ -80,7 +81,7 @@ func (a *Auth) RedirectIfAuthed(destination string, next http.HandlerFunc) http.
 		// get auth info
 		ac := r.Context().Value("AuthCtx")
 		if ac != nil {
-			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			http.Redirect(w, r, destination, http.StatusSeeOther)
 		} else {
 			next(w, r)
 		}

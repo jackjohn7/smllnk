@@ -21,7 +21,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	auth := mids.NewAuth("smllnk_session", sessionStore)
+	auth := mids.NewAuth("smllnk_session", repos, sessionStore)
 
 	addr := fmt.Sprintf(":%s", environment.Env.Port)
 
