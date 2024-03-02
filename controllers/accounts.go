@@ -145,7 +145,9 @@ func (c *AccountsController) logoutHandler(w http.ResponseWriter, r *http.Reques
 	ac := acRaw.(*mids.AuthCtx)
 
 	// delete session
-	c.sessionStore.Delete(ac.Session.Id)
+	if ok := c.sessionStore.Delete(ac.Session.Id); !ok {
+		fmt.Println("Something went wrong deleting session")
+	}
 
 	// set cookie to delete
 	http.SetCookie(w, &http.Cookie{
