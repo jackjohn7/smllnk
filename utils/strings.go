@@ -7,7 +7,7 @@ import (
 	"math/rand"
 )
 
-const SessionIdLength int = 64 // length in bytes
+const SessionIdLength int = 128 // length in bytes
 
 var alphabet = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 
