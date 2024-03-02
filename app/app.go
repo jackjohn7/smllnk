@@ -11,6 +11,7 @@ import (
 
 	"github.com/gorilla/csrf"
 	"github.com/jackjohn7/smllnk/environment"
+	"github.com/jackjohn7/smllnk/utils"
 	"github.com/urfave/negroni"
 )
 
@@ -69,7 +70,7 @@ Serve static directory
 func (app *App) WithStaticDirectory(urlPath string, filePath string) *App {
 	app.staticPaths = append(app.staticPaths, &staticDirectory{
 		urlPath:    urlPath,
-		fileServer: http.FileServer(http.Dir(filePath)),
+		fileServer: http.FileServer(utils.SecureFileSystem{http.Dir(filePath)}),
 	})
 	return app
 }

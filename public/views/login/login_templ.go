@@ -26,53 +26,38 @@ func LoginTemplate(baseProps layout.BaseProps, emailError string) templ.Componen
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Var2 := templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
-			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
-			if !templ_7745c5c3_IsBuffer {
-				templ_7745c5c3_Buffer = templ.GetBuffer()
-				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-white text-center text-xl\">Welcome to simplicity!</h1><form action=\"/login\" method=\"POST\" class=\"flex flex-col items-center\"><div class=\"flex flex-col items-center space-y-2 p-4 w-[50%]\"><!--<label class=\"text-[#72e15a]\">Email:</label>--><input name=\"email\" placeholder=\"Email\" class=\"bg-up-1 rounded-sm px-2 py-2 w-full text-white\"> ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			if emailError != "" {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p class=\"text-red-500\">")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				var templ_7745c5c3_Var3 string
-				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(emailError)
-				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/login/login.templ`, Line: 14, Col: 24}
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p>")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn w-full font-bold\" type=\"submit\">Submit</button></div>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = utils.CsrfHelper(baseProps.CsrfToken).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</form><p class=\"text-white text-center\">Upon entering an email address, you will be emailed a link that will authenticate your session.</p>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			if !templ_7745c5c3_IsBuffer {
-				_, templ_7745c5c3_Err = io.Copy(templ_7745c5c3_W, templ_7745c5c3_Buffer)
-			}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"container-view\" hx-target=\"this\" hx-swap=\"innerHTML\"><h1 class=\"text-white text-center text-xl\">Welcome to simplicity!</h1><form id=\"login-form\" hx-post=\"/login\" action=\"/login\" method=\"POST\" class=\"flex flex-col items-center\" hx-indicator=\"#indicator\"><div class=\"flex flex-col items-center space-y-2 p-4 w-full\"><!--<label class=\"text-[#72e15a]\">Email:</label>--><input name=\"email\" placeholder=\"Email\" class=\"bg-up-1 rounded-sm px-2 py-2 w-full text-white\"> ")
+		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
-		})
-		templ_7745c5c3_Err = layout.Base(baseProps).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		}
+		if emailError != "" {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p class=\"text-red-500\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var2 string
+			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(emailError)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/login/login.templ`, Line: 25, Col: 24}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn w-full font-bold\" type=\"submit\">Submit</button><p class=\"text-primary-green htmx-indicator\" id=\"indicator\">Loading...</p></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = utils.CsrfHelper(baseProps.CsrfToken).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</form><p class=\"text-white text-center\">Upon entering an email address, you will be emailed a link that will authenticate your session.</p></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

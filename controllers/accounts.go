@@ -41,12 +41,12 @@ func (c *AccountsController) Register(mux *http.ServeMux) error {
 }
 
 func (c *AccountsController) loginPageHandler(w http.ResponseWriter, r *http.Request) {
-	utils.Render(w, login.LoginTemplate(layout.BaseProps{
+	utils.Render(w, login.LoginPage(layout.BaseProps{
 		Title:       "SmlLnk - Login",
 		Description: "Get started sharing links today!",
 		AuthCtx:     nil,
 		CsrfToken:   csrf.Token(r),
-	}, ""))
+	}))
 }
 
 func (c *AccountsController) loginHandler(w http.ResponseWriter, r *http.Request) {
@@ -55,7 +55,7 @@ func (c *AccountsController) loginHandler(w http.ResponseWriter, r *http.Request
 	email := r.FormValue("email")
 	if email == "" {
 		// no email provided. Return Error
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusOK)
 		utils.Render(w, login.LoginTemplate(layout.BaseProps{
 			Title:       "SmlLnk - Login",
 			Description: "Get started sharing links today!",
@@ -93,7 +93,7 @@ func (c *AccountsController) loginHandler(w http.ResponseWriter, r *http.Request
 	// temporarily just output mr.Id to stdout
 	fmt.Printf("link: /magic/%s\n", mr.Id)
 
-	w.Write([]byte(fmt.Sprintf("Login link sent to %s", email)))
+	utils.Render(w, login.CheckInbox(email))
 }
 
 func (c *AccountsController) magicHandler(w http.ResponseWriter, r *http.Request) {

@@ -1,0 +1,11 @@
+package login
+
+import "github.com/jackjohn7/smllnk/public/views/layout"
+
+templ LoginPage(baseProps layout.BaseProps) {
+  @layout.Base(baseProps) {
+    <div class="flex flex-col w-screen items-center">
+      @LoginTemplate(baseProps, "")
+    </div>
+  }
+}
