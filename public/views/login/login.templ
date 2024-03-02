@@ -20,7 +20,11 @@ templ LoginTemplate(baseProps layout.BaseProps, emailError string) {
     >
       <div class="flex flex-col items-center space-y-2 p-4 w-full">
         <!--<label class="text-[#72e15a]">Email:</label>-->
-        <input name="email" placeholder="Email" class="bg-up-1 rounded-sm px-2 py-2 w-full text-white"/>
+        <input
+          name="email"
+          placeholder="Email"
+          class="bg-up-1 rounded-sm px-2 py-2 w-full text-white"
+        />
         if emailError != "" {
           <p class="text-red-500">
             { emailError }
