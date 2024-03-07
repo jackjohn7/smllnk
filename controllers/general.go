@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/csrf"
@@ -31,21 +32,28 @@ func NewGeneralController(
 }
 
 func (c *GeneralController) Register(mux *http.ServeMux) error {
-	mux.HandleFunc("GET /", c.auth.AuthCtx(c.auth.Restrict(indexHandler)))
+	mux.HandleFunc("GET /", c.auth.AuthCtx(c.auth.Restrict(c.indexHandler)))
 	return nil
 }
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
+func (c *GeneralController) indexHandler(w http.ResponseWriter, r *http.Request) {
 	acRaw := r.Context().Value("AuthCtx")
 	if acRaw == nil {
 		return
 	}
 
 	ac := acRaw.(*mids.AuthCtx)
+	links, err := c.repositories.Links.GetAllUserLinks(ac.User)
+	for _, l := range links {
+		fmt.Printf("%+v\n", l)
+	}
+	if err != nil {
+		// render err template in future
+	}
 	utils.Render(w, index.IndexTemplate(layout.BaseProps{
-		Title: "SmlLnk",
+		Title:       "SmlLnk",
 		Description: "Simplest and Cheapest Link-shortener",
-		AuthCtx: ac,
-		CsrfToken: csrf.Token(r),
-	}))
+		AuthCtx:     ac,
+		CsrfToken:   csrf.Token(r),
+	}, links))
 }

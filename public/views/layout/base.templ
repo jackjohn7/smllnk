@@ -20,12 +20,19 @@ templ Base(props BaseProps) {
       <script src="public/scripts/htmx.min.js" ></script>
     </head>
     <body>
-      <div class="bg-base-dark h-screen w-screen">
+      <!-- Made in the open with care by John Branch. -->
+      <!-- Project repo can be found at https://github.com/jackjohn7/smllnk -->
+      <!-- Made with Go, Templ, and TailwindCSS -->
+      // NOTE: Hardcoded gradient color here (dark-green-dot)
+      <div class="bg-base-dark h-screen w-screen absolute inset-0 h-full w-full bg-[radial-gradient(#132416_1px,transparent_1px)] [background-size:16px_16px]">
         <div class="bg-primary-green p-2 justify-between flex flex-row">
-          <a href="/" class="text-black font-bold">SmlLnk</a>
+          // Switch this anchor tag to link to about page later
+          <a href="/" class="text-black font-bold block text-2xl">SmlLnk</a>
+          // Add home button for authed users
+          // logout button for authed users
           if props.AuthCtx != nil {
-            <form action="/logout" method="POST">
-              <button type="submit">Log Out</button>
+            <form action="/logout" method="POST" class="m-0">
+              <button type="submit" class="text-2xl">Log Out</button>
               @utils.CsrfHelper(props.CsrfToken)
             </form>
           }

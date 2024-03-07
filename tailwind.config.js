@@ -15,6 +15,7 @@ module.exports = {
         'midnight-green': '#1A535C',
         'pink-accent': '#e15ad9',
         'primary-green': '#72e15a',
+        'dark-green-dot': '#132416',
         'base-dark': '#121619',
         'base-up-one': '#1f272f',
       },

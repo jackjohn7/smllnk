@@ -1,11 +1,20 @@
 package index
 
 import "github.com/jackjohn7/smllnk/public/views/layout"
+import "github.com/jackjohn7/smllnk/db/models"
+import "github.com/jackjohn7/smllnk/public/views/components"
+import "fmt"
 
-templ IndexTemplate(baseProps layout.BaseProps) {
+templ IndexTemplate(baseProps layout.BaseProps, links []models.Link) {
   @layout.Base(baseProps) {
-    <div>
-      <h1 class="text-primary-green text-sm">Hello, authenticated user!</h1>
+    <div class="flex flex-col items-center">
+      <div class="w-[50%]">
+        <!--<h1 class="text-primary-green text-sm">Hello, authenticated user!</h1>-->
+        @components.CreateLinkForm(baseProps)
+        for _, link := range links {
+          @components.Link(baseProps, components.LinkProps{Link: link, DialogId: fmt.Sprintf("delete-dialog-%s", link.Id)})
+        }
+      </div>
     </div>
   }
 }

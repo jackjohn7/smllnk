@@ -11,8 +11,11 @@ import "io"
 import "bytes"
 
 import "github.com/jackjohn7/smllnk/public/views/layout"
+import "github.com/jackjohn7/smllnk/db/models"
+import "github.com/jackjohn7/smllnk/public/views/components"
+import "fmt"
 
-func IndexTemplate(baseProps layout.BaseProps) templ.Component {
+func IndexTemplate(baseProps layout.BaseProps, links []models.Link) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -31,7 +34,21 @@ func IndexTemplate(baseProps layout.BaseProps) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div><h1 class=\"text-primary-green text-sm\">Hello, authenticated user!</h1></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-col items-center\"><div class=\"w-[50%]\"><!--<h1 class=\"text-primary-green text-sm\">Hello, authenticated user!</h1>-->")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.CreateLinkForm(baseProps).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			for _, link := range links {
+				templ_7745c5c3_Err = components.Link(baseProps, components.LinkProps{Link: link, DialogId: fmt.Sprintf("delete-dialog-%s", link.Id)}).Render(ctx, templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

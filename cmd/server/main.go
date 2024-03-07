@@ -28,6 +28,7 @@ func main() {
 	app := app.New(addr, []app.Controller{
 		controllers.NewGeneralController(repos, sessionStore, auth),
 		controllers.NewAccountsController(repos, sessionStore, auth),
+		controllers.NewLinksController(repos, sessionStore, auth),
 	})
 	// Handler will concat the paths here
 	app.WithStaticDirectory("GET /public/styles/*", ".")

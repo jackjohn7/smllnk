@@ -1,0 +1,92 @@
+package components
+
+import (
+  "github.com/jackjohn7/smllnk/public/views/layout"
+  "github.com/jackjohn7/smllnk/db/models"
+	"github.com/jackjohn7/smllnk/public/views/utils"
+)
+
+type LinkProps struct {
+  Link models.Link
+  DialogId string
+}
+
+script onOpenClick(dialogId string) {
+  let dialog = document.getElementById(dialogId);
+  dialog.showModal();
+}
+
+script onCloseClick(dialogId string) {
+  let dialog = document.getElementById(dialogId);
+  dialog.close();
+}
+
+templ CreateLinkForm(baseProps layout.BaseProps) {
+  <h1 class="text-primary-green text-2xl text-center">Create Link</h1>
+  <form 
+    class="flex flex-col space-y-2"
+    hx-post="/links"
+    hx-on::after-request=" if(event.detail.successful) this.reset()"
+  >
+    <label
+      for="destination"
+      class="text-white text-xl"
+    >Destination</label>
+    <input 
+      id="destination"
+      name="destination"
+      placeholder="https://github.com/jackjohn7/smllnk"
+      required
+      class="bg-up-1 rounded-sm px-2 py-2 w-full text-white"
+    />
+    <label
+      for="nickname"
+      class="text-white text-xl"
+    >Name</label>
+    <input 
+      id="nickname"
+      name="nickname"
+      placeholder="SmlLnk Project repo"
+      value="unnamed"
+      class="bg-up-1 rounded-sm px-2 py-2 w-full text-white"
+    />
+    @utils.CsrfHelper(baseProps.CsrfToken)
+    <button class="btn w-full font-bold" type="submit">Create</button>
+  </form>
+}
+
+templ Link(baseProps layout.BaseProps, linkProps LinkProps) {
+  <div class="flex flex-row">
+    <dialog closed id={linkProps.DialogId} class="bg-up-1 rounded-lg p-2">
+      <div class="flex flex-col space-y-3">
+        <h1 class="text-white text-2xl">Confirm</h1>
+        <p class="text-white">
+          Are you sure you wish to delete this link? (name: {linkProps.Link.Name})
+          This action cannot be reversed.
+        </p>
+        <div class="flex flex-row justify-between">
+          <button
+            onclick={onCloseClick(linkProps.DialogId)}
+            class="btn rounded-sm px-2 py-1"
+            type="button"
+            id={linkProps.DialogId}
+          >Cancel</button>
+          // add HTMX post to this button later. Also add the route and DB logic
+          <button
+            onclick={onCloseClick(linkProps.DialogId)}
+            class="btn btn-pink rounded-sm px-2 py-1"
+            type="button"
+            id={linkProps.DialogId}
+          >Delete</button>
+        </div>
+      </div>
+    </dialog>
+    <div class="flex flex-row justify-between w-full">
+      <div>
+        <h1 class="text-white">{linkProps.Link.Name}</h1>
+        <a target="_blank" href={templ.URL(linkProps.Link.Destination)} class="text-primary-green">{linkProps.Link.Destination}</a>
+      </div>
+      <button class="btn btn-pink" onclick={onOpenClick(linkProps.DialogId)} type="button" id={linkProps.DialogId}>Delete</button>
+    </div>
+  </div>
+}

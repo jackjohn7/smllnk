@@ -54,12 +54,12 @@ func Base(props BaseProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><link href=\"/public/styles/utilities.css\" rel=\"stylesheet\"><link href=\"/public/styles/custom.css\" rel=\"stylesheet\"><script src=\"public/scripts/htmx.min.js\"></script></head><body><div class=\"bg-base-dark h-screen w-screen\"><div class=\"bg-primary-green p-2 justify-between flex flex-row\"><a href=\"/\" class=\"text-black font-bold\">SmlLnk</a> ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><link href=\"/public/styles/utilities.css\" rel=\"stylesheet\"><link href=\"/public/styles/custom.css\" rel=\"stylesheet\"><script src=\"public/scripts/htmx.min.js\"></script></head><body><!-- Made in the open with care by John Branch. --><!-- Project repo can be found at https://github.com/jackjohn7/smllnk --><!-- Made with Go, Templ, and TailwindCSS --><div class=\"bg-base-dark h-screen w-screen absolute inset-0 h-full w-full bg-[radial-gradient(#132416_1px,transparent_1px)] [background-size:16px_16px]\"><div class=\"bg-primary-green p-2 justify-between flex flex-row\"><a href=\"/\" class=\"text-black font-bold block text-2xl\">SmlLnk</a>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if props.AuthCtx != nil {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form action=\"/logout\" method=\"POST\"><button type=\"submit\">Log Out</button>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form action=\"/logout\" method=\"POST\" class=\"m-0\"><button type=\"submit\" class=\"text-2xl\">Log Out</button>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
