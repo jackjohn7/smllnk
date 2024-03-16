@@ -37,6 +37,7 @@ func (a *Auth) AuthCtx(next http.HandlerFunc) http.HandlerFunc {
 		// get session token from cookies
 		cookie, err := r.Cookie(a.SessionCookieKey)
 		if err != nil {
+			// no cookie exists
 			next(w, r)
 			return
 		}

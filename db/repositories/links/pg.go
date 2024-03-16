@@ -44,8 +44,9 @@ func (r *LinkRepositoryPG) Update(id string, newLink *models.Link) (ok bool) {
 }
 
 // Delete link by id
-func (r *LinkRepositoryPG) Delete(id string) (ok bool) {
-	return
+func (r *LinkRepositoryPG) Delete(id string) bool {
+	_, err := r.db.Exec("DELETE FROM links WHERE id=$1", id)
+	return err == nil
 }
 
 // Get all links

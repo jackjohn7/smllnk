@@ -16,6 +16,13 @@ script onOpenClick(dialogId string) {
   dialog.showModal();
 }
 
+script onHxDeleteSuccess(dialogId string) {
+  if(event.detail.successful) {
+    let dialog = document.getElementById(dialogId);
+    dialog.close();
+  }
+}
+
 script onCloseClick(dialogId string) {
   let dialog = document.getElementById(dialogId);
   dialog.close();
@@ -58,8 +65,8 @@ templ CreateLinkForm(baseProps layout.BaseProps) {
 }
 
 templ Link(baseProps layout.BaseProps, linkProps LinkProps) {
-  <div class="flex flex-row">
-    <dialog closed id={linkProps.DialogId} class="bg-up-1 rounded-lg p-2">
+  <div class="flex flex-row" id={"link-" + linkProps.Link.Id }>
+    <dialog closed id={ linkProps.DialogId } class="bg-up-1 rounded-lg p-2">
       <div class="flex flex-col space-y-3">
         <h1 class="text-white text-2xl">Confirm</h1>
         <p class="text-white">
@@ -68,27 +75,35 @@ templ Link(baseProps layout.BaseProps, linkProps LinkProps) {
         </p>
         <div class="flex flex-row justify-between">
           <button
-            onclick={onCloseClick(linkProps.DialogId)}
+            onclick={ onCloseClick(linkProps.DialogId) }
             class="btn rounded-sm px-2 py-1"
             type="button"
-            id={linkProps.DialogId}
+            id={"cancel-btn-" + linkProps.DialogId}
           >Cancel</button>
           // add HTMX post to this button later. Also add the route and DB logic
-          <button
-            onclick={onCloseClick(linkProps.DialogId)}
-            class="btn btn-pink rounded-sm px-2 py-1 font-bold"
-            type="button"
-            id={linkProps.DialogId}
-          >Delete</button>
+          <form
+            class="m-0"
+            hx-on::after-request={ onHxDeleteSuccess(linkProps.DialogId) }
+            hx-post={"/links/" + linkProps.Link.Id}
+            hx-target={"#link-" + linkProps.Link.Id }
+            hx-swap="outerHTML"
+          >
+            @utils.CsrfHelper(baseProps.CsrfToken)
+            <button
+              id={"delete-btn-" + linkProps.DialogId}
+              type="submit"
+              class="btn btn-pink rounded-sm px-2 py-1 font-bold"
+            >Delete</button>
+          </form>
         </div>
       </div>
     </dialog>
     <div class="flex flex-row justify-between w-full">
       <div>
         <h1 class="text-white">{linkProps.Link.Name}</h1>
-        <a target="_blank" href={templ.URL(linkProps.Link.Destination)} class="text-primary-green">{linkProps.Link.Destination}</a>
+        <a target="_blank" href={ templ.URL(linkProps.Link.Destination) } class="text-primary-green">{linkProps.Link.Destination}</a>
       </div>
-      <button class="btn btn-pink" onclick={onOpenClick(linkProps.DialogId)} type="button" id={linkProps.DialogId}>Delete</button>
+      <button class="btn btn-pink" onclick={ onOpenClick(linkProps.DialogId) } type="button" id={linkProps.DialogId}>Delete</button>
     </div>
   </div>
 }

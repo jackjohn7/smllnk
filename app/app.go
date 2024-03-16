@@ -107,7 +107,7 @@ func (app *App) Serve() {
 	n.Use(negroni.NewRecovery())
 	n.UseHandler(app.mux)
 
-	CSRF := csrf.Protect([]byte(environment.Env.Sec.CSRF_KEY))
+	CSRF := csrf.Protect([]byte(environment.Env.Sec.CSRF_KEY), csrf.Secure(environment.Env.IsProd))
 
 	app.server = &http.Server{
 		Addr:    app.addr,

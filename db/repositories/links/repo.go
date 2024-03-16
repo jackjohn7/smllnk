@@ -8,7 +8,7 @@ type LinkRepository interface {
 	// Update link with new data
 	Update(id string, newLink *models.Link) (ok bool)
 	// Delete link by id
-	Delete(id string) (ok bool)
+	Delete(id string) bool
 	// Get all links
 	GetAll() (links []*models.Link, err error)
 	// Get links by User

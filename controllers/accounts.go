@@ -130,6 +130,7 @@ func (c *AccountsController) magicHandler(w http.ResponseWriter, r *http.Request
 		Expires:  session.ExpiresAt,
 		SameSite: http.SameSiteStrictMode,
 		Path:     "/",
+		HttpOnly: true,
 	})
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
@@ -156,6 +157,7 @@ func (c *AccountsController) logoutHandler(w http.ResponseWriter, r *http.Reques
 		Expires:  time.Now(),
 		SameSite: http.SameSiteStrictMode,
 		Path:     "/",
+		HttpOnly: true,
 	})
 
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
