@@ -26,6 +26,8 @@ templ CreateLinkForm(baseProps layout.BaseProps) {
   <form 
     class="flex flex-col space-y-2"
     hx-post="/links"
+    hx-target="#links"
+    hx-swap="beforeend"
     hx-on::after-request=" if(event.detail.successful) this.reset()"
   >
     <label
@@ -74,7 +76,7 @@ templ Link(baseProps layout.BaseProps, linkProps LinkProps) {
           // add HTMX post to this button later. Also add the route and DB logic
           <button
             onclick={onCloseClick(linkProps.DialogId)}
-            class="btn btn-pink rounded-sm px-2 py-1"
+            class="btn btn-pink rounded-sm px-2 py-1 font-bold"
             type="button"
             id={linkProps.DialogId}
           >Delete</button>

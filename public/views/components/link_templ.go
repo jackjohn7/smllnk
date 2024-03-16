@@ -56,7 +56,7 @@ func CreateLinkForm(baseProps layout.BaseProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-primary-green text-2xl text-center\">Create Link</h1><form class=\"flex flex-col space-y-2\" hx-post=\"/links\" hx-on::after-request=\" if(event.detail.successful) this.reset()\"><label for=\"destination\" class=\"text-white text-xl\">Destination</label> <input id=\"destination\" name=\"destination\" placeholder=\"https://github.com/jackjohn7/smllnk\" required class=\"bg-up-1 rounded-sm px-2 py-2 w-full text-white\"> <label for=\"nickname\" class=\"text-white text-xl\">Name</label> <input id=\"nickname\" name=\"nickname\" placeholder=\"SmlLnk Project repo\" value=\"unnamed\" class=\"bg-up-1 rounded-sm px-2 py-2 w-full text-white\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-primary-green text-2xl text-center\">Create Link</h1><form class=\"flex flex-col space-y-2\" hx-post=\"/links\" hx-target=\"#links\" hx-swap=\"beforeend\" hx-on::after-request=\" if(event.detail.successful) this.reset()\"><label for=\"destination\" class=\"text-white text-xl\">Destination</label> <input id=\"destination\" name=\"destination\" placeholder=\"https://github.com/jackjohn7/smllnk\" required class=\"bg-up-1 rounded-sm px-2 py-2 w-full text-white\"> <label for=\"nickname\" class=\"text-white text-xl\">Name</label> <input id=\"nickname\" name=\"nickname\" placeholder=\"SmlLnk Project repo\" value=\"unnamed\" class=\"bg-up-1 rounded-sm px-2 py-2 w-full text-white\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -103,7 +103,7 @@ func Link(baseProps layout.BaseProps, linkProps LinkProps) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(linkProps.Link.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 63, Col: 80}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 65, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -151,7 +151,7 @@ func Link(baseProps layout.BaseProps, linkProps LinkProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"btn btn-pink rounded-sm px-2 py-1\" type=\"button\" id=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"btn btn-pink rounded-sm px-2 py-1 font-bold\" type=\"button\" id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -166,7 +166,7 @@ func Link(baseProps layout.BaseProps, linkProps LinkProps) templ.Component {
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(linkProps.Link.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 85, Col: 51}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 87, Col: 51}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -188,7 +188,7 @@ func Link(baseProps layout.BaseProps, linkProps LinkProps) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(linkProps.Link.Destination)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 86, Col: 126}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 88, Col: 126}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {

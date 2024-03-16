@@ -11,9 +11,11 @@ templ IndexTemplate(baseProps layout.BaseProps, links []models.Link) {
       <div class="w-[50%]">
         <!--<h1 class="text-primary-green text-sm">Hello, authenticated user!</h1>-->
         @components.CreateLinkForm(baseProps)
-        for _, link := range links {
-          @components.Link(baseProps, components.LinkProps{Link: link, DialogId: fmt.Sprintf("delete-dialog-%s", link.Id)})
-        }
+        <div id="links" class="flex flex-col space-y-2">
+          for _, link := range links {
+            @components.Link(baseProps, components.LinkProps{Link: link, DialogId: fmt.Sprintf("delete-dialog-%s", link.Id)})
+          }
+        </div>
       </div>
     </div>
   }
