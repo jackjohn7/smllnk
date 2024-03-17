@@ -77,5 +77,17 @@ func (r *LinkRepositoryPG) DeleteAllUserLinks(user *models.User) (ok bool) {
 
 // Get link by Id
 func (r *LinkRepositoryPG) GetById(id string) (link *models.Link, err error) {
-	return nil, errors.New("Unimplemented")
+	rows, err := r.db.Queryx("SELECT * FROM links l WHERE l.id = $1", id)
+	if err != nil {
+		return nil, err
+	}
+
+	links := make([]models.Link, 0)
+	for rows.Next() {
+		var l models.Link
+		err = rows.StructScan(&l)
+		links = append(links, l)
+	}
+	link = &links[0]
+	return
 }

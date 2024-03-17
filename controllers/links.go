@@ -33,15 +33,39 @@ func NewLinksController(
 
 func (c *LinksController) Register(mux *http.ServeMux) error {
 	mux.HandleFunc("POST /links", c.auth.AuthCtx(c.auth.Restrict(c.createLinkHandler)))
-	// this route should be DELETE but DELETE was being forbidden for some reason
+	// NOTE: this route should be DELETE but DELETE was being forbidden for some reason
 	mux.HandleFunc("POST /links/{linkId}", c.auth.AuthCtx(c.auth.Restrict(c.deleteLinkHandler)))
+	mux.HandleFunc("GET /{linkId}", c.traverseLinkHandler)
 	return nil
+}
+
+func (c *LinksController) traverseLinkHandler(w http.ResponseWriter, r *http.Request) {
+	linkId := r.PathValue("linkId")
+	if len(linkId) > 10 {
+		w.WriteHeader(http.StatusNotFound)
+		// TODO: redirect to 404 page
+		w.Write([]byte("404 - Link definitely invalid"))
+		return
+	}
+
+	// get link by id
+	link, err := c.repositories.Links.GetById(linkId)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		// TODO: redirect to 404 page
+		w.Write([]byte(fmt.Sprintf("404 - %s", err.Error())))
+		return
+	}
+
+	// moved permanently is industry standard for link shorteners
+	//  WHY: https://stackoverflow.com/a/9015652
+	http.Redirect(w, r, link.Destination, http.StatusMovedPermanently)
 }
 
 func (c *LinksController) createLinkHandler(w http.ResponseWriter, r *http.Request) {
 	acRaw := r.Context().Value("AuthCtx")
 	if acRaw == nil {
-		// if not authed, return 403
+		// if not authed, return 401
 		w.WriteHeader(http.StatusUnauthorized)
 		w.Write([]byte("You must log in to use this functionality"))
 		return
@@ -87,7 +111,7 @@ func (c *LinksController) deleteLinkHandler(w http.ResponseWriter, r *http.Reque
 	}
 	acRaw := r.Context().Value("AuthCtx")
 	if acRaw == nil {
-		// if not authed, return 403
+		// if not authed, return 401
 		w.WriteHeader(http.StatusUnauthorized)
 		w.Write([]byte("You must log in to use this functionality"))
 		return
