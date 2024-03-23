@@ -2,6 +2,7 @@ package links
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -72,7 +73,8 @@ func (r *LinkRepositoryPG) GetAllUserLinks(user *models.User) (links []models.Li
 
 // Delete all of a user's links
 func (r *LinkRepositoryPG) DeleteAllUserLinks(user *models.User) (ok bool) {
-	return
+	_, err := r.db.Exec("DELETE FROM links WHERE user_id=$1", user.Id)
+	return err == nil
 }
 
 // Get link by Id
@@ -88,6 +90,11 @@ func (r *LinkRepositoryPG) GetById(id string) (link *models.Link, err error) {
 		err = rows.StructScan(&l)
 		links = append(links, l)
 	}
+
+	if len(links) == 0 {
+		return nil, errors.New(fmt.Sprintf("No link found matching id: %s", id))
+	}
+
 	link = &links[0]
 	return
 }

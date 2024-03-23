@@ -79,7 +79,7 @@ func CreateLinkForm(baseProps layout.BaseProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-primary-green text-2xl text-center\">Create Link</h1><form autocomplete=\"off\" class=\"flex flex-col space-y-2\" hx-post=\"/links\" hx-target=\"#links\" hx-swap=\"beforeend\" hx-on::after-request=\" if(event.detail.successful) this.reset()\"><label for=\"destination\" class=\"text-white text-xl\">Destination</label> <input id=\"destination\" name=\"destination\" placeholder=\"https://github.com/jackjohn7/smllnk\" required class=\"bg-up-1 rounded-sm px-2 py-2 w-full text-white\"> <label for=\"nickname\" class=\"text-white text-xl\">Name</label> <input id=\"nickname\" name=\"nickname\" placeholder=\"SmlLnk Project repo\" value=\"unnamed\" class=\"bg-up-1 rounded-sm px-2 py-2 w-full text-white\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-primary-green text-2xl text-center font-inter\">Create Link</h1><form autocomplete=\"off\" class=\"flex flex-col space-y-2\" hx-post=\"/links\" hx-target=\"#links\" hx-swap=\"beforeend\" hx-on::after-request=\" if(event.detail.successful) this.reset()\"><label for=\"destination\" class=\"text-white text-xl font-inter\">Destination</label> <input id=\"destination\" name=\"destination\" placeholder=\"https://github.com/jackjohn7/smllnk\" required class=\"bg-up-1 rounded-sm px-2 py-2 w-full text-white font-inter\"> <label for=\"nickname\" class=\"text-white text-xl font-inter\">Name</label> <input id=\"nickname\" name=\"nickname\" placeholder=\"SmlLnk Project repo\" value=\"unnamed\" class=\"bg-up-1 rounded-sm px-2 py-2 w-full text-white font-inter\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -87,7 +87,7 @@ func CreateLinkForm(baseProps layout.BaseProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn btn-green w-full font-bold\" type=\"submit\">Create</button></form>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn btn-green w-full font-bold fonr-inter\" type=\"submit\">Create</button></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -157,7 +157,7 @@ func Link(baseProps layout.BaseProps, linkProps LinkProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"btn rounded-sm px-2 py-1\" type=\"button\" id=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"btn btn-green rounded-sm px-2 py-1 font-inter\" type=\"button\" id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -214,14 +214,14 @@ func Link(baseProps layout.BaseProps, linkProps LinkProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" type=\"submit\" class=\"btn btn-pink rounded-sm px-2 py-1 font-bold\">Delete</button></form></div></div></dialog><div class=\"flex flex-row justify-between w-full\"><div><h1 class=\"text-white\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" type=\"submit\" class=\"btn bg-red-400 rounded-sm px-2 py-1 font-bold font-inter\">Delete</button></form></div></div></dialog><div class=\"flex flex-row justify-between w-full\"><div><h1 class=\"text-white font-inter\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(linkProps.Link.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 107, Col: 51}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 107, Col: 62}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -236,14 +236,14 @@ func Link(baseProps layout.BaseProps, linkProps LinkProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"text-primary-green\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"text-primary-green font-inter\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(linkProps.Link.Destination)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 108, Col: 129}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 108, Col: 140}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
@@ -257,7 +257,7 @@ func Link(baseProps layout.BaseProps, linkProps LinkProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn bg-blue-400\" onclick=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn bg-blue-400 font-inter\" onclick=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -281,7 +281,7 @@ func Link(baseProps layout.BaseProps, linkProps LinkProps) templ.Component {
 		var templ_7745c5c3_Var10 string
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(linkProps.Link.Id)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 111, Col: 157}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 111, Col: 168}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
@@ -295,7 +295,7 @@ func Link(baseProps layout.BaseProps, linkProps LinkProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn btn-pink\" onclick=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn bg-red-400 font-inter font-bold\" onclick=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

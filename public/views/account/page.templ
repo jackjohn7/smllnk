@@ -1,0 +1,55 @@
+package account
+
+import "github.com/jackjohn7/smllnk/public/views/layout"
+import "github.com/jackjohn7/smllnk/public/views/utils"
+
+templ AccountTemplate(baseProps layout.BaseProps) {
+  @layout.Base(baseProps) {
+    <div class="flex flex-col w-screen items-center">
+      <div class="w-[50%] flex flex-col space-y-8">
+        <h1 class="text-white text-3xl text-center font-inter">Welcome, { baseProps.AuthCtx.User.Email }</h1>
+        <dialog id="account-deletion-dialog" class="bg-up-1 rounded-lg p-2 m-t-12">
+          <div class="flex flex-col space-y-4">
+            <h1 class="text-white font-bold text-3xl">Notice</h1>
+            <p class="text-white font-inter">
+              Deleting your account is permanent. All data related to your account will
+              be removed from our database.
+            </p>
+            <div class="flex flex-row justify-between">
+              <button type="button" class="font-inter btn btn-green">Cancel</button>
+              <form action="/accounts/delete" method="POST" class="m-0">
+                <button type="submit" class="btn bg-red-400 font-inter font-bold">Delete Account</button>
+                @utils.CsrfHelper(baseProps.CsrfToken)
+              </form>
+            </div>
+          </div>
+        </dialog>
+
+        <section id="links">
+          <h2 class="text-white text-2xl font-inter">Links</h2>
+          <p class="font-inter text-white">
+            Your links have been clicked 100 times.
+          </p>
+        </section>
+
+        <section id="account-deletion">
+          <h2 class="text-red-400 text-2xl font-inter">Actions</h2>
+          <p class="text-white font-inter">
+            If you no longer wish to utilize SmlLnk, you can delete your account along 
+            with all of your links. Doing so is irreversible. SmlLnk respects your 
+            right to be forgotten should you choose to be.
+          </p>
+          <script>
+            function openDialog() {
+              // dialog
+              let dialog = document.getElementById("account-deletion-dialog");
+              dialog.showModal();
+            }
+          </script>
+          <button onclick="openDialog()" class="btn bg-red-400 font-bold font-inter" type="button" >Delete Account</button>
+        </section>
+        
+      </div>
+    </div>
+  }
+}

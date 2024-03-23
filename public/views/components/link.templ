@@ -33,7 +33,7 @@ script onShortClick(baseProps layout.BaseProps, props LinkProps) {
 }
 
 templ CreateLinkForm(baseProps layout.BaseProps) {
-  <h1 class="text-primary-green text-2xl text-center">Create Link</h1>
+  <h1 class="text-primary-green text-2xl text-center font-inter">Create Link</h1>
   <form 
     autocomplete="off"
     class="flex flex-col space-y-2"
@@ -44,28 +44,28 @@ templ CreateLinkForm(baseProps layout.BaseProps) {
   >
     <label
       for="destination"
-      class="text-white text-xl"
+      class="text-white text-xl font-inter"
     >Destination</label>
     <input 
       id="destination"
       name="destination"
       placeholder="https://github.com/jackjohn7/smllnk"
       required
-      class="bg-up-1 rounded-sm px-2 py-2 w-full text-white"
+      class="bg-up-1 rounded-sm px-2 py-2 w-full text-white font-inter"
     />
     <label
       for="nickname"
-      class="text-white text-xl"
+      class="text-white text-xl font-inter"
     >Name</label>
     <input 
       id="nickname"
       name="nickname"
       placeholder="SmlLnk Project repo"
       value="unnamed"
-      class="bg-up-1 rounded-sm px-2 py-2 w-full text-white"
+      class="bg-up-1 rounded-sm px-2 py-2 w-full text-white font-inter"
     />
     @utils.CsrfHelper(baseProps.CsrfToken)
-    <button class="btn btn-green w-full font-bold" type="submit">Create</button>
+    <button class="btn btn-green w-full font-bold fonr-inter" type="submit">Create</button>
   </form>
 }
 
@@ -81,7 +81,7 @@ templ Link(baseProps layout.BaseProps, linkProps LinkProps) {
         <div class="flex flex-row justify-between">
           <button
             onclick={ onCloseClick(linkProps.DialogId) }
-            class="btn rounded-sm px-2 py-1"
+            class="btn btn-green rounded-sm px-2 py-1 font-inter"
             type="button"
             id={"cancel-btn-" + linkProps.DialogId}
           >Cancel</button>
@@ -97,7 +97,7 @@ templ Link(baseProps layout.BaseProps, linkProps LinkProps) {
             <button
               id={"delete-btn-" + linkProps.DialogId}
               type="submit"
-              class="btn btn-pink rounded-sm px-2 py-1 font-bold"
+              class="btn bg-red-400 rounded-sm px-2 py-1 font-bold font-inter"
             >Delete</button>
           </form>
         </div>
@@ -105,12 +105,12 @@ templ Link(baseProps layout.BaseProps, linkProps LinkProps) {
     </dialog>
     <div class="flex flex-row justify-between w-full">
       <div>
-        <h1 class="text-white">{linkProps.Link.Name}</h1>
-        <a target="_blank" href={ templ.URL(linkProps.Link.Destination) } class="text-primary-green">{ linkProps.Link.Destination }</a>
+        <h1 class="text-white font-inter">{linkProps.Link.Name}</h1>
+        <a target="_blank" href={ templ.URL(linkProps.Link.Destination) } class="text-primary-green font-inter">{ linkProps.Link.Destination }</a>
       </div>
       <div class="flex flex-row space-x-2">
-        <button class="btn bg-blue-400" onclick={ onShortClick(baseProps, linkProps) } type="button" id={ "id-btn-" + linkProps.Link.Id }>{ linkProps.Link.Id }</button>
-        <button class="btn btn-pink" onclick={ onOpenClick(linkProps.DialogId) } type="button" id={ linkProps.DialogId }>Delete</button>
+        <button class="btn bg-blue-400 font-inter" onclick={ onShortClick(baseProps, linkProps) } type="button" id={ "id-btn-" + linkProps.Link.Id }>{ linkProps.Link.Id }</button>
+        <button class="btn bg-red-400 font-inter font-bold" onclick={ onOpenClick(linkProps.DialogId) } type="button" id={ linkProps.DialogId }>Delete</button>
       </div>
     </div>
   </div>

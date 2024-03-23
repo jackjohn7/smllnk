@@ -34,6 +34,7 @@ func NewGeneralController(
 func (c *GeneralController) Register(mux *http.ServeMux) error {
 	mux.HandleFunc("GET /", c.auth.AuthCtx(c.auth.Restrict(c.indexHandler)))
 	mux.HandleFunc("GET /favicon.ico", c.faviconHandler)
+	mux.HandleFunc("GET /robots.txt", c.robotsTxtHandler)
 	return nil
 }
 
@@ -66,5 +67,17 @@ func (c *GeneralController) faviconHandler(w http.ResponseWriter, r *http.Reques
 	}
 
 	w.Header().Set("Content-Type", "image/png")
+	w.Write(buf)
+}
+
+func (c *GeneralController) robotsTxtHandler(w http.ResponseWriter, r *http.Request) {
+	buf, err := os.ReadFile("public/robots.txt")
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("nah"))
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/plain")
 	w.Write(buf)
 }

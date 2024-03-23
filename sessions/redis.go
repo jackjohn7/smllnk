@@ -54,7 +54,8 @@ func (store *RedisSessionStore) Get(id string) (*Session, error) {
 }
 
 func (store *RedisSessionStore) Delete(id string) (ok bool) {
-	return
+	_, err := store.conn.Del(ctx, id).Result()
+	return err == nil
 }
 
 func (store *RedisSessionStore) Refresh(id string) (session *Session, err error) {

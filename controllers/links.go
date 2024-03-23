@@ -40,6 +40,7 @@ func (c *LinksController) Register(mux *http.ServeMux) error {
 }
 
 func (c *LinksController) traverseLinkHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("hitting this")
 	linkId := r.PathValue("linkId")
 	if len(linkId) > 10 {
 		w.WriteHeader(http.StatusNotFound)
@@ -57,6 +58,7 @@ func (c *LinksController) traverseLinkHandler(w http.ResponseWriter, r *http.Req
 		return
 	}
 
+	fmt.Println("getting here now")
 	// moved permanently is industry standard for link shorteners
 	//  WHY: https://stackoverflow.com/a/9015652
 	http.Redirect(w, r, link.Destination, http.StatusMovedPermanently)

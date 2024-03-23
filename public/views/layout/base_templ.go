@@ -55,12 +55,12 @@ func Base(props BaseProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><link href=\"/public/styles/utilities.css\" rel=\"stylesheet\"><link href=\"/public/styles/custom.css\" rel=\"stylesheet\"><script src=\"public/scripts/htmx.min.js\"></script></head><body><!-- Made in the open with care by John Branch. --><!-- Project repo can be found at https://github.com/jackjohn7/smllnk --><!-- Made with Go, Templ, and TailwindCSS --><div class=\"bg-base-dark h-screen w-screen absolute inset-0 h-full w-full bg-[radial-gradient(#132416_1px,transparent_1px)] [background-size:16px_16px]\"><div class=\"bg-primary-green p-2 justify-between flex flex-row\"><a href=\"/\" class=\"text-black font-bold block text-2xl\">SmlLnk</a>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><link href=\"/public/styles/utilities.css\" rel=\"stylesheet\"><link href=\"/public/styles/custom.css\" rel=\"stylesheet\"><script src=\"public/scripts/htmx.min.js\"></script><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10..0,100..900&amp;display=swap\" rel=\"stylesheet\"></head><body><!-- Made in the open with care by John Branch. --><!-- Project repo can be found at https://github.com/jackjohn7/smllnk --><!-- Made with Go, Templ, and TailwindCSS --><div class=\"bg-base-dark h-screen w-screen absolute inset-0 h-full w-full bg-[radial-gradient(#132416_1px,transparent_1px)] [background-size:16px_16px]\"><div class=\"bg-primary-green p-2 justify-between flex flex-row\"><a href=\"/\" class=\"text-black font-bold block text-2xl font-inter\">SmlLnk</a>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if props.AuthCtx != nil {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form action=\"/logout\" method=\"POST\" class=\"m-0\"><button type=\"submit\" class=\"text-2xl\">Log Out</button>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-row space-x-3\"><a href=\"/account\" class=\"text-2xl font-inter\">Account</a><form action=\"/logout\" method=\"POST\" class=\"m-0\"><button type=\"submit\" class=\"text-2xl font-inter\">Log Out</button>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -68,7 +68,7 @@ func Base(props BaseProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</form>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</form></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

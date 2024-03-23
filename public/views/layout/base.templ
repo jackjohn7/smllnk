@@ -19,6 +19,9 @@ templ Base(props BaseProps) {
       <link href="/public/styles/utilities.css" rel="stylesheet" />
       <link href="/public/styles/custom.css" rel="stylesheet" />
       <script src="public/scripts/htmx.min.js" ></script>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link href="https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10..0,100..900&display=swap" rel="stylesheet" />
     </head>
     <body>
       <!-- Made in the open with care by John Branch. -->
@@ -28,14 +31,17 @@ templ Base(props BaseProps) {
       <div class="bg-base-dark h-screen w-screen absolute inset-0 h-full w-full bg-[radial-gradient(#132416_1px,transparent_1px)] [background-size:16px_16px]">
         <div class="bg-primary-green p-2 justify-between flex flex-row">
           // Switch this anchor tag to link to about page later
-          <a href="/" class="text-black font-bold block text-2xl">SmlLnk</a>
+          <a href="/" class="text-black font-bold block text-2xl font-inter">SmlLnk</a>
           // Add home button for authed users
           // logout button for authed users
           if props.AuthCtx != nil {
-            <form action="/logout" method="POST" class="m-0">
-              <button type="submit" class="text-2xl">Log Out</button>
-              @utils.CsrfHelper(props.CsrfToken)
-            </form>
+            <div class="flex flex-row space-x-3">
+              <a href="/account" class="text-2xl font-inter">Account</a>
+              <form action="/logout" method="POST" class="m-0">
+                <button type="submit" class="text-2xl font-inter">Log Out</button>
+                @utils.CsrfHelper(props.CsrfToken)
+              </form>
+            </div>
           }
         </div>
         { children... }

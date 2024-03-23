@@ -2,6 +2,7 @@ package users
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
@@ -40,7 +41,9 @@ func (r *UserRepositoryPG) Update(id string, newUser *models.User) (ok bool) {
 }
 
 func (r *UserRepositoryPG) Delete(id string) (ok bool) {
-	return
+	fmt.Printf("deleting id: %s\n", id)
+	_, err := r.db.Exec("DELETE FROM users WHERE id=$1", id)
+	return err == nil
 }
 
 func (r *UserRepositoryPG) GetAll() (users []*models.User, err error) {

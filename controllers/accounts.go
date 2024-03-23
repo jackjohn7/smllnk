@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/csrf"
 	repos "github.com/jackjohn7/smllnk/db/repositories"
 	mids "github.com/jackjohn7/smllnk/middlewares"
+	"github.com/jackjohn7/smllnk/public/views/account"
 	"github.com/jackjohn7/smllnk/public/views/layout"
 	"github.com/jackjohn7/smllnk/public/views/login"
 	"github.com/jackjohn7/smllnk/sessions"
@@ -37,6 +38,8 @@ func (c *AccountsController) Register(mux *http.ServeMux) error {
 	mux.HandleFunc("POST /login", c.auth.AuthCtx(c.auth.RedirectIfAuthed("/", c.loginHandler)))
 	mux.HandleFunc("GET /magic/{id}", c.auth.AuthCtx(c.auth.RedirectIfAuthed("/", c.magicHandler)))
 	mux.HandleFunc("POST /logout", c.auth.AuthCtx(c.auth.Restrict(c.logoutHandler)))
+	mux.HandleFunc("GET /account", c.auth.AuthCtx(c.auth.Restrict(c.accountPageHandler)))
+	mux.HandleFunc("POST /accounts/delete", c.auth.AuthCtx(c.auth.Restrict(c.deleteAccountsHandler)))
 	return nil
 }
 
@@ -116,7 +119,7 @@ func (c *AccountsController) magicHandler(w http.ResponseWriter, r *http.Request
 	// create session
 	session, err := c.sessionStore.Create(user, r.UserAgent())
 	if err != nil {
-		w.WriteHeader(http.StatusNotImplemented)
+		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
 	}
@@ -130,6 +133,13 @@ func (c *AccountsController) magicHandler(w http.ResponseWriter, r *http.Request
 		Path:     "/",
 		HttpOnly: true,
 	})
+
+	// delete magic request
+	if ok := c.repositories.MagicRequests.Delete(mr.Id); !ok {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Couldn't delete magic request"))
+		return
+	}
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
@@ -151,12 +161,71 @@ func (c *AccountsController) logoutHandler(w http.ResponseWriter, r *http.Reques
 	// set cookie to delete
 	http.SetCookie(w, &http.Cookie{
 		Name:     c.auth.SessionCookieKey,
-		Value:    ac.Session.Id,
-		Expires:  time.Now(),
+		Expires:  time.Unix(0, 0),
 		SameSite: http.SameSiteStrictMode,
 		Path:     "/",
 		HttpOnly: true,
 	})
 
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
+}
+
+func (c *AccountsController) accountPageHandler(w http.ResponseWriter, r *http.Request) {
+	acRaw := r.Context().Value("AuthCtx")
+	if acRaw == nil {
+		return
+	}
+
+	ac := acRaw.(*mids.AuthCtx)
+
+	utils.Render(w, account.AccountTemplate(layout.BaseProps{
+		Title:       "Manage Account",
+		Description: "",
+		AuthCtx:     ac,
+		CsrfToken:   csrf.Token(r),
+	}))
+}
+
+func (c *AccountsController) deleteAccountsHandler(w http.ResponseWriter, r *http.Request) {
+	acRaw := r.Context().Value("AuthCtx")
+	if acRaw == nil {
+		return
+	}
+
+	ac := acRaw.(*mids.AuthCtx)
+
+	// delete links
+	if ok := c.repositories.Links.DeleteAllUserLinks(ac.User); !ok {
+		// handle error
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Could not delete user's links"))
+		return
+	}
+
+	// delete user
+	if ok := c.repositories.Users.Delete(ac.User.Id); !ok {
+		// handle error
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Could not delete user"))
+		return
+	}
+
+	// invalidate user's session
+	if ok := c.sessionStore.Delete(ac.Session.Id); !ok {
+		// handle error
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Could not delete user's session"))
+		return
+	}
+
+	// delete cookie
+	http.SetCookie(w, &http.Cookie{
+		Name:     c.auth.SessionCookieKey,
+		Expires:  time.Unix(0, 0),
+		SameSite: http.SameSiteStrictMode,
+		Path:     "/",
+		HttpOnly: true,
+	})
+
+	http.Redirect(w, r, "/", http.StatusMovedPermanently)
 }

@@ -19,6 +19,9 @@ module.exports = {
         'base-dark': '#121619',
         'base-up-one': '#1f272f',
       },
+      fontFamily: {
+        "inter": ["Inter", "sans-serif"]
+      }
     },
   },
   plugins: [
