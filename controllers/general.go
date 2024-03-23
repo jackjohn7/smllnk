@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/csrf"
 	"github.com/jackjohn7/smllnk/db/repositories"
@@ -33,6 +33,7 @@ func NewGeneralController(
 
 func (c *GeneralController) Register(mux *http.ServeMux) error {
 	mux.HandleFunc("GET /", c.auth.AuthCtx(c.auth.Restrict(c.indexHandler)))
+	mux.HandleFunc("GET /favicon.ico", c.faviconHandler)
 	return nil
 }
 
@@ -44,9 +45,6 @@ func (c *GeneralController) indexHandler(w http.ResponseWriter, r *http.Request)
 
 	ac := acRaw.(*mids.AuthCtx)
 	links, err := c.repositories.Links.GetAllUserLinks(ac.User)
-	for _, l := range links {
-		fmt.Printf("%+v\n", l)
-	}
 	if err != nil {
 		// render err template in future
 	}
@@ -57,4 +55,16 @@ func (c *GeneralController) indexHandler(w http.ResponseWriter, r *http.Request)
 		AuthCtx:     ac,
 		CsrfToken:   csrf.Token(r),
 	}, links))
+}
+
+func (c *GeneralController) faviconHandler(w http.ResponseWriter, r *http.Request) {
+	buf, err := os.ReadFile("public/favicon.png")
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("nah"))
+		return
+	}
+
+	w.Header().Set("Content-Type", "image/png")
+	w.Write(buf)
 }
