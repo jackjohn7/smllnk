@@ -28,9 +28,14 @@ script onCloseClick(dialogId string) {
   dialog.close();
 }
 
+script onShortClick(baseProps layout.BaseProps, props LinkProps) {
+  navigator.clipboard.writeText(baseProps.BaseUrl + "/" + props.Link.Id);
+}
+
 templ CreateLinkForm(baseProps layout.BaseProps) {
   <h1 class="text-primary-green text-2xl text-center">Create Link</h1>
   <form 
+    autocomplete="off"
     class="flex flex-col space-y-2"
     hx-post="/links"
     hx-target="#links"
@@ -60,7 +65,7 @@ templ CreateLinkForm(baseProps layout.BaseProps) {
       class="bg-up-1 rounded-sm px-2 py-2 w-full text-white"
     />
     @utils.CsrfHelper(baseProps.CsrfToken)
-    <button class="btn w-full font-bold" type="submit">Create</button>
+    <button class="btn btn-green w-full font-bold" type="submit">Create</button>
   </form>
 }
 
@@ -101,9 +106,12 @@ templ Link(baseProps layout.BaseProps, linkProps LinkProps) {
     <div class="flex flex-row justify-between w-full">
       <div>
         <h1 class="text-white">{linkProps.Link.Name}</h1>
-        <a target="_blank" href={ templ.URL(linkProps.Link.Destination) } class="text-primary-green">{linkProps.Link.Destination}</a>
+        <a target="_blank" href={ templ.URL(linkProps.Link.Destination) } class="text-primary-green">{ linkProps.Link.Destination }</a>
       </div>
-      <button class="btn btn-pink" onclick={ onOpenClick(linkProps.DialogId) } type="button" id={linkProps.DialogId}>Delete</button>
+      <div class="flex flex-row space-x-2">
+        <button class="btn bg-blue-400" onclick={ onShortClick(baseProps, linkProps) } type="button" id={ "id-btn-" + linkProps.Link.Id }>{ linkProps.Link.Id }</button>
+        <button class="btn btn-pink" onclick={ onOpenClick(linkProps.DialogId) } type="button" id={ linkProps.DialogId }>Delete</button>
+      </div>
     </div>
   </div>
 }

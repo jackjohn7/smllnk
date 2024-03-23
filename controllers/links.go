@@ -97,6 +97,7 @@ func (c *LinksController) createLinkHandler(w http.ResponseWriter, r *http.Reque
 
 	baseProps := layout.BaseProps{
 		AuthCtx:   ac,
+		BaseUrl:   r.Host,
 		CsrfToken: csrf.Token(r),
 	}
 	utils.Render(w, components.Link(baseProps, components.LinkProps{

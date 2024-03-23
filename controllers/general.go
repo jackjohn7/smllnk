@@ -53,6 +53,7 @@ func (c *GeneralController) indexHandler(w http.ResponseWriter, r *http.Request)
 	utils.Render(w, index.IndexTemplate(layout.BaseProps{
 		Title:       "SmlLnk",
 		Description: "Simplest and Cheapest Link-shortener",
+		BaseUrl:     r.Host,
 		AuthCtx:     ac,
 		CsrfToken:   csrf.Token(r),
 	}, links))

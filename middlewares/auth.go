@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -20,6 +21,7 @@ type (
 	AuthCtx struct {
 		User    *models.User
 		Session *sessions.Session
+		Guest   bool
 	}
 )
 
@@ -38,6 +40,8 @@ func (a *Auth) AuthCtx(next http.HandlerFunc) http.HandlerFunc {
 		cookie, err := r.Cookie(a.SessionCookieKey)
 		if err != nil {
 			// no cookie exists
+			authCtx := &AuthCtx{Guest: true}
+			r = r.WithContext(context.WithValue(r.Context(), "AuthCtx", authCtx))
 			next(w, r)
 			return
 		}
@@ -53,12 +57,16 @@ func (a *Auth) AuthCtx(next http.HandlerFunc) http.HandlerFunc {
 				Expires:  time.Unix(0, 0),
 				HttpOnly: true,
 			})
+			authCtx := &AuthCtx{Guest: true}
+			r = r.WithContext(context.WithValue(r.Context(), "AuthCtx", authCtx))
+			next(w, r)
+			return
 		}
 		// if we have session, go fetch corresponding user
 		user, err := a.repos.Users.GetById(session.UserId)
 
 		// extend context with auth and user info
-		authCtx := &AuthCtx{User: user, Session: session}
+		authCtx := &AuthCtx{User: user, Session: session, Guest: false}
 		r = r.WithContext(context.WithValue(r.Context(), "AuthCtx", authCtx))
 
 		next(w, r)
@@ -68,8 +76,14 @@ func (a *Auth) AuthCtx(next http.HandlerFunc) http.HandlerFunc {
 func (a *Auth) Restrict(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// get auth info
-		ac := r.Context().Value("AuthCtx")
-		if ac == nil {
+		acRaw := r.Context().Value("AuthCtx")
+		if acRaw == nil {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
+		ac := acRaw.(*AuthCtx)
+		if ac.Guest {
+			fmt.Println("restrict: Redirecting guest")
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 		} else {
 			next(w, r)
@@ -80,8 +94,14 @@ func (a *Auth) Restrict(next http.HandlerFunc) http.HandlerFunc {
 func (a *Auth) RedirectIfAuthed(destination string, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// get auth info
-		ac := r.Context().Value("AuthCtx")
-		if ac != nil {
+		acRaw := r.Context().Value("AuthCtx")
+		if acRaw == nil {
+			http.Redirect(w, r, destination, http.StatusSeeOther)
+			return
+		}
+		ac := acRaw.(*AuthCtx)
+		if !ac.Guest {
+			fmt.Println("Redirecting guest")
 			http.Redirect(w, r, destination, http.StatusSeeOther)
 		} else {
 			next(w, r)

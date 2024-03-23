@@ -11,6 +11,7 @@ templ LoginTemplate(baseProps layout.BaseProps, emailError string) {
   >
     <h1 class="text-white text-center text-xl">Welcome to simplicity!</h1>
     <form
+      autocomplete="off"
       id="login-form"
       hx-post="/login"
       action="/login"
@@ -30,7 +31,7 @@ templ LoginTemplate(baseProps layout.BaseProps, emailError string) {
             { emailError }
           </p>
         }
-        <button class="btn w-full font-bold" type="submit">Submit</button>
+        <button class="btn btn-green w-full font-bold" type="submit">Submit</button>
         <p class="text-primary-green htmx-indicator" id="indicator">
           Loading...
         </p>

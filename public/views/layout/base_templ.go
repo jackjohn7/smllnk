@@ -16,6 +16,7 @@ import "github.com/jackjohn7/smllnk/public/views/utils"
 type BaseProps struct {
 	Title       string
 	Description string
+	BaseUrl     string
 	AuthCtx     *middlewares.AuthCtx
 	CsrfToken   string
 }
@@ -40,7 +41,7 @@ func Base(props BaseProps) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(props.Title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/layout/base.templ`, Line: 15, Col: 25}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/layout/base.templ`, Line: 16, Col: 25}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {

@@ -3,9 +3,12 @@
 }
 
 .btn {
-  background: #72e15a;
   border-radius: 0.5em;
   padding: 0.2em;
+}
+
+.btn-green {
+  background: #72e15a;
 }
 
 .btn-pink {

@@ -56,6 +56,16 @@ func onCloseClick(dialogId string) templ.ComponentScript {
 	}
 }
 
+func onShortClick(baseProps layout.BaseProps, props LinkProps) templ.ComponentScript {
+	return templ.ComponentScript{
+		Name: `__templ_onShortClick_4d65`,
+		Function: `function __templ_onShortClick_4d65(baseProps, props){navigator.clipboard.writeText(baseProps.BaseUrl + "/" + props.Link.Id);
+}`,
+		Call:       templ.SafeScript(`__templ_onShortClick_4d65`, baseProps, props),
+		CallInline: templ.SafeScriptInline(`__templ_onShortClick_4d65`, baseProps, props),
+	}
+}
+
 func CreateLinkForm(baseProps layout.BaseProps) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
@@ -69,7 +79,7 @@ func CreateLinkForm(baseProps layout.BaseProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-primary-green text-2xl text-center\">Create Link</h1><form class=\"flex flex-col space-y-2\" hx-post=\"/links\" hx-target=\"#links\" hx-swap=\"beforeend\" hx-on::after-request=\" if(event.detail.successful) this.reset()\"><label for=\"destination\" class=\"text-white text-xl\">Destination</label> <input id=\"destination\" name=\"destination\" placeholder=\"https://github.com/jackjohn7/smllnk\" required class=\"bg-up-1 rounded-sm px-2 py-2 w-full text-white\"> <label for=\"nickname\" class=\"text-white text-xl\">Name</label> <input id=\"nickname\" name=\"nickname\" placeholder=\"SmlLnk Project repo\" value=\"unnamed\" class=\"bg-up-1 rounded-sm px-2 py-2 w-full text-white\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-primary-green text-2xl text-center\">Create Link</h1><form autocomplete=\"off\" class=\"flex flex-col space-y-2\" hx-post=\"/links\" hx-target=\"#links\" hx-swap=\"beforeend\" hx-on::after-request=\" if(event.detail.successful) this.reset()\"><label for=\"destination\" class=\"text-white text-xl\">Destination</label> <input id=\"destination\" name=\"destination\" placeholder=\"https://github.com/jackjohn7/smllnk\" required class=\"bg-up-1 rounded-sm px-2 py-2 w-full text-white\"> <label for=\"nickname\" class=\"text-white text-xl\">Name</label> <input id=\"nickname\" name=\"nickname\" placeholder=\"SmlLnk Project repo\" value=\"unnamed\" class=\"bg-up-1 rounded-sm px-2 py-2 w-full text-white\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -77,7 +87,7 @@ func CreateLinkForm(baseProps layout.BaseProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn w-full font-bold\" type=\"submit\">Create</button></form>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn btn-green w-full font-bold\" type=\"submit\">Create</button></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -124,7 +134,7 @@ func Link(baseProps layout.BaseProps, linkProps LinkProps) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(linkProps.Link.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 72, Col: 80}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 77, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -211,7 +221,7 @@ func Link(baseProps layout.BaseProps, linkProps LinkProps) templ.Component {
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(linkProps.Link.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 102, Col: 51}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 107, Col: 51}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -233,13 +243,51 @@ func Link(baseProps layout.BaseProps, linkProps LinkProps) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(linkProps.Link.Destination)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 103, Col: 128}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 108, Col: 129}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></div><div class=\"flex flex-row space-x-2\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, onShortClick(baseProps, linkProps))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn bg-blue-400\" onclick=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var9 templ.ComponentScript = onShortClick(baseProps, linkProps)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var9.Call)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" type=\"button\" id=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString("id-btn-" + linkProps.Link.Id))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var10 string
+		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(linkProps.Link.Id)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `public/views/components/link.templ`, Line: 111, Col: 157}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -251,8 +299,8 @@ func Link(baseProps layout.BaseProps, linkProps LinkProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var9 templ.ComponentScript = onOpenClick(linkProps.DialogId)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var9.Call)
+		var templ_7745c5c3_Var11 templ.ComponentScript = onOpenClick(linkProps.DialogId)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var11.Call)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -264,7 +312,7 @@ func Link(baseProps layout.BaseProps, linkProps LinkProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Delete</button></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Delete</button></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

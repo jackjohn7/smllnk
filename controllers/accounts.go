@@ -44,6 +44,7 @@ func (c *AccountsController) loginPageHandler(w http.ResponseWriter, r *http.Req
 	utils.Render(w, login.LoginPage(layout.BaseProps{
 		Title:       "SmlLnk - Login",
 		Description: "Get started sharing links today!",
+		BaseUrl:     r.Host,
 		AuthCtx:     nil,
 		CsrfToken:   csrf.Token(r),
 	}))
@@ -59,6 +60,7 @@ func (c *AccountsController) loginHandler(w http.ResponseWriter, r *http.Request
 		utils.Render(w, login.LoginTemplate(layout.BaseProps{
 			Title:       "SmlLnk - Login",
 			Description: "Get started sharing links today!",
+			BaseUrl:     r.Host,
 			AuthCtx:     nil,
 			CsrfToken:   csrf.Token(r),
 		}, "No email provided, lil bro"))
@@ -73,13 +75,9 @@ func (c *AccountsController) loginHandler(w http.ResponseWriter, r *http.Request
 			// if something goes wrong creating user, just write err (temp)
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
+			return
 		}
 	}
-
-	/*
-		Temporarily, I'm just going to immediately log in the user.
-		In the future, the user should be emailed a magic link instead
-	*/
 
 	// create magic request
 	mr, err := c.repositories.MagicRequests.Create(user.Id)
